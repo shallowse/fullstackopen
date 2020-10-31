@@ -1,8 +1,19 @@
 const express = require('express');
+const morgan = require('morgan');
+
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(express.json());
+
+morgan.token('postdata', (req, res) => {
+  if (req.method !== 'POST') {
+    return ' ';
+  }
+  return JSON.stringify(req.body);
+});
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postdata'));
 
 let persons = [
   {
@@ -88,5 +99,5 @@ app.get('/info', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
