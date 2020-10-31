@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 import personService from './services/persons';
+
 
 const App = () => {
   /*
@@ -17,6 +19,15 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterByName, setFilterByName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  // Helper function to reduce copypaste for notifying the user about changes
+  const notifyUser = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 5000);
+  };
 
   // Get all the persons from the server to a local list
   useEffect(() => {
@@ -27,7 +38,7 @@ const App = () => {
         setPersons(response);
       })
       .catch(error => {
-        alert(`Error while fetching (GET) person data from the server: ${error}`);
+        notifyUser(`Error while fetching (GET) person data from the server: ${error}`);
         setPersons([]);
       });
   }, []);
@@ -66,8 +77,9 @@ const App = () => {
             return person.id === response.id ? { ...person, number: response.number } : person;
           });
           setPersons(update);
+          notifyUser(`Updated ${response.name}'s phone number`);
         })
-        .catch(error => alert(`Error while updating (PUT) new person data ${updatePerson.name} to the server: ${error}`));
+        .catch(error => notifyUser(`Error while updating (PUT) new person data ${updatePerson.name} to the server: ${error}`));
     }
     // Add a new person
     else {
@@ -78,10 +90,11 @@ const App = () => {
       personService
         .postPerson(newPerson)
         .then(response => {
-          console.log(response);
+          //console.log(response);
           setPersons(persons.concat(response));
+          notifyUser(`Added ${response.name}`);
         })
-        .catch(error => alert(`Error while posting (POST) new person data to the server: ${error}`));
+        .catch(error => notifyUser(`Error while posting (POST) new person data to the server: ${error}`));
     }
 
     setNewName('');
@@ -102,9 +115,11 @@ const App = () => {
         const updatedPersonList = persons.filter(x => x.id !== person.id);
         //console.log(updatedPersonList);
         setPersons(updatedPersonList);
+        notifyUser(`Deleted ${person.name}`);
       }
       )
-      .catch(error => alert(`Error while deleting (DELETE) person (${person.name}) data from the server: ${error}`))
+      .catch(error => notifyUser(`Error while deleting (DELETE) person (${person.name}) data from the server:
+                                  Maybe the person has been removed from the server :: ${error}`));
   }
 
   const handleNameChange = (event) => {
@@ -129,6 +144,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={errorMessage} />
 
       <Filter
         filterByName={filterByName}
