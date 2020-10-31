@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "deploy": "cd ../../ && git subtree push --prefix osa3/puhelinluettelon-backend heroku main",
+    "build:ui": "rm -fr build && cd ../puhelinluettelo-frontend && yarn run build && cp -r build ../puhelinluettelo-backend",
+    "deploy": "cd ../../ && git subtree push --prefix osa3/puhelinluettelo-backend heroku main",
+    "deploy:full": "yarn run build:ui && git add . && git commit -m uibuild && git push origin main && yarn run deploy",
     "logs:prod": "heroku logs --tail",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

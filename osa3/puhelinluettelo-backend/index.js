@@ -7,6 +7,7 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('build'));
 
 morgan.token('postdata', (req, res) => {
   if (req.method !== 'POST') {
@@ -43,10 +44,6 @@ const generateId = () => {
   const ID = Math.floor(Math.random() * 100000000);
   return ID;
 };
-
-app.get('/', (req, res) => {
-  res.redirect('/api/persons');
-});
 
 app.get('/api/persons', (req, res) => {
   res.json(persons);
