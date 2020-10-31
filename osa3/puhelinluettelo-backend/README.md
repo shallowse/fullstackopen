@@ -1,6 +1,6 @@
 # Link to the Heroku app
 
-[https://frightful-village-22651.herokuapp.com/api/persons](https://frightful-village-22651.herokuapp.com/api/persons)
+[https://happy-fullstack-osa3.herokuapp.com](https://happy-fullstack-osa3.herokuapp.com)
 
 ## How to deploy this subdirectory to Heroku
 
