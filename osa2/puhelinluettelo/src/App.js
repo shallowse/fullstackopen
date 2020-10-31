@@ -19,10 +19,9 @@ const App = () => {
   const [filterByName, setFilterByName] = useState('');
 
   useEffect(() => {
-    // TBD: add localhost to URL
-    axios.get('http://192.168.0.23:3001/persons')
+    axios.get('http://localhost:3001/persons')
       .then(response => {
-        console.log('promise fullfilled', response);
+        //console.log('promise fullfilled', response);
         setPersons(response.data);
       });
   }, []);
