@@ -5,7 +5,7 @@
 ## How to deploy this subdirectory to Heroku
 
 ```
-$ git subtree push --prefix osa3/puhelinluettelon-backend heroku main
+$ git subtree push --prefix osa3/puhelinluettelo-backend heroku main
 ```
 
 Example command from:   
@@ -15,6 +15,6 @@ Example command from:
 
 ```
 $ pwd
-<full path to working tree>/osa3/puhelinluettelon-backend
+<full path to working tree>/osa3/puhelinluettelo-backend
 $ yarn deploy
 ```
