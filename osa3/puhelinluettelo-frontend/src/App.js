@@ -13,7 +13,7 @@ const App = () => {
   const [filterByName, setFilterByName] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Helper function to reduce copypaste for notifying the user about changes
+  // Helper function to reduce copypaste for notifying the user
   const notifyUser = (message) => {
     setErrorMessage(message);
     setTimeout(() => {
@@ -46,7 +46,6 @@ const App = () => {
       return;
     }
 
-
     // Update an existing person
     if (persons.find(x => x.name === newName) !== undefined) {
       const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
@@ -71,7 +70,8 @@ const App = () => {
           setPersons(update);
           notifyUser(`Updated ${response.name}'s phone number`);
         })
-        .catch(error => notifyUser(`Error while updating (PUT) new person data ${updatePerson.name} to the server: ${error}`));
+        .catch(error =>
+          notifyUser(`Error while updating (PUT) new person data ${updatePerson.name} to the server: ${error.response.data.error}`));
     }
     // Add a new person
     else {
@@ -86,7 +86,10 @@ const App = () => {
           setPersons(persons.concat(response));
           notifyUser(`Added ${response.name}`);
         })
-        .catch(error => notifyUser(`Error while posting (POST) new person data to the server: ${error}`));
+        .catch(error => {
+          console.log(error.response.data.error);
+          notifyUser(`Error while posting (POST) new person data to the server: ${error.response.data.error}`)
+        });
     }
 
     setNewName('');

@@ -15,15 +15,12 @@ const postPerson = (newPerson = {}) => {
 const deletePerson = (personId = '') => {
   const url = `${baseUrl}/${personId}`;
   const request = axios.delete(url);
-
-  // json-server returns an empty object if the deletion was successful
   return request.then(response => response.data);
 }
 
 const updatePerson = (person = '') => {
   const url = `${baseUrl}/${person.id}`;
   const request = axios.put(url, person);
-
   return request.then(response => response.data);
 };
 

@@ -7,11 +7,12 @@ const Persons = ({
   return (
     <>
       {
-        personsToShow.map(person =>
-          <p key={person.name}>
+        personsToShow.map(person => {
+          return (<p key={person.id}>
             {person.name} {person.number} {' '}
             <button onClick={() => handlePersonDelete(person)}>delete</button>
-          </p>)
+          </p>);
+        })
       }
     </>
   );

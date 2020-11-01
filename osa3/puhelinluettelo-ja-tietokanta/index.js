@@ -23,15 +23,11 @@ app.use(express.static('build'));
 // Routes
 app.get('/api/persons', (req, res) => {
   Person.find({})
-    .then(persons => res.json(persons));
+    .then(persons => res.json(persons.map(person => person.toJSON())));
 });
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body;
-
-  if (!body.name || !body.number) {
-    return res.status(400).json({ error: 'name or number missing' });
-  }
 
   const person = new Person({
     name: body.name,
@@ -39,7 +35,9 @@ app.post('/api/persons', (req, res) => {
   });
 
   person.save()
-    .then(savedPerson => res.json(savedPerson.toJSON()));
+    .then(savedPerson => savedPerson.toJSON())
+    .then(savedPerson => res.json(savedPerson))
+    .catch(error => next(error));
 });
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -62,20 +60,19 @@ app.delete('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
+// Note:
+// Seems that validation does not work for findByIdAndUpdate
+// https://stackoverflow.com/questions/31794558/mongoose-findbyidandupdate-not-running-validations-on-subdocuments
 app.put('/api/persons/:id', (req, res, next) => {
   const id = req.params.id;
   const body = req.body;
-
-  if (!body.name || !body.number) {
-    return res.status(400).json({ errror: 'name or number missing' });
-  }
 
   const person = {
     name: body.name,
     number: body.number,
   };
 
-  Person.findByIdAndUpdate(id, person, {new: true})
+  Person.findByIdAndUpdate(id, person, { new: true })
     .then(updatedPerson => res.json(updatedPerson.toJSON()))
     .catch(error => next(error));
 });
@@ -102,6 +99,8 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.name === 'CastError' && err.kind === 'ObjectId') {
     return res.status(400).send({ error: 'malformatted id' });
+  } else if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: err.message });
   }
 
   next(err);
