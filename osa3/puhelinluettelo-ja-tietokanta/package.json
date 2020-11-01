@@ -9,11 +9,13 @@
     "build:ui": "rm -fr build && cd ../puhelinluettelo-frontend && yarn run build && cp -r build ../puhelinluettelo-ja-tietokanta",
     "deploy": "cd ../../ && git subtree push --prefix osa3/puhelinluettelo-ja-tietokanta heroku main",
     "logs:prod": "heroku logs --tail",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^7.12.1",
     "nodemon": "^2.0.6"
   },
   "dependencies": {
