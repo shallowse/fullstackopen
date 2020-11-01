@@ -21,12 +21,14 @@ const blogStats = (blogs) => {
   let entityArray = [
     {
       author: blogs[0].author,
-      blogs: 0,
+      blogs: 1,
       likes: blogs[0].likes,
     },
   ];
 
-  for (let i = 0; i < blogs.length; i++) {
+  // Note: i starts from 1 because we already have 'taken' the first entry
+  // from blogs to entityArray[0]
+  for (let i = 1; i < blogs.length; i++) {
     let found = false;
     for (let j = 0; j < entityArray.length; j++) {
       if (blogs[i].author === entityArray[j].author) {
@@ -52,21 +54,24 @@ const mostBlogs = (blogs) => {
   const entityArray = blogStats(blogs);
   //console.log(entityArray);
 
-  const maxEntity = entityArray.reduce((a, b) => { return a.blogs >= b.blogs ? a : b; }, 0);
+  const maxEntity = entityArray.reduce((a, b) => { return a.blogs > b.blogs ? a : b; }, 0);
 
-  //console.log(maxEntity);
+  //console.log('mostBlogs :: ', maxEntity);
   return { author: maxEntity.author, blogs: maxEntity.blogs };
 };
 
 const mostLikes = (blogs) => {
   const entityArray = blogStats(blogs);
-  const maxLikes = entityArray.reduce((a, b) => { return a.likes >= b.likes ? a : b; }, 0);
-  //console.log(maxLikes);
+  const maxLikes = entityArray.reduce((a, b) => { return a.likes > b.likes ? a : b; }, 0);
+
+  //console.log('mostLikes :: ', maxLikes);
   return { author: maxLikes.author, likes: maxLikes.likes };
 };
 
-
 // Used for testing functionality
+// $ node list_helper.js
+//   mostBlogs ::  { author: 'Testaaja', blogs: 3, likes: 30 }
+//   mostLikes ::  { author: 'Edsger W. Dijkstra', blogs: 2, likes: 130 }
 /*
 const blogs = [
   {
@@ -98,7 +103,7 @@ const blogs = [
     title: 'Canonical string reduction',
     author: 'Edsger W. Dijkstra',
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-    likes: 12,
+    likes: 125,
     __v: 0
   },
   {
