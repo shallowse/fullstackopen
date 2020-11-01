@@ -5,6 +5,7 @@
 ## How to deploy this subdirectory to Heroku
 
 ```
+$ heroku git:remote -a happy-fullstack-osa3
 $ git subtree push --prefix osa3/puhelinluettelo-backend heroku main
 ```
 
