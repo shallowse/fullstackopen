@@ -62,6 +62,8 @@ test('a blog post with no "likes" gets 0 as default', async () => {
 
   // Here we assume that the newBlog is the last one in the
   // returned results
+  // TBD: change to const result = await api ....
+  // !!!!!!!!
   const like = blogsAtEnd.map(t => t.likes);
   expect(like[like.length - 1]).toBe(0);
 });

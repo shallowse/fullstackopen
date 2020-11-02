@@ -1,4 +1,4 @@
-const dummy = (blogs) => {
+const dummy = () => { // removed blog as parameter to get rid of linter error
   return 1;
 };
 
