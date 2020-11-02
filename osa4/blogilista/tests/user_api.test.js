@@ -125,8 +125,6 @@ describe('when there are initially two users at db', () => {
     const usersAtEnd = await helper.usersInDb();
     expect(usersAtEnd).toHaveLength(usersAtStart.length);
   });
-
-
 });
 
 afterAll(() => {
