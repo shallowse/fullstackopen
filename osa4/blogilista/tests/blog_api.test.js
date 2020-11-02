@@ -82,6 +82,42 @@ test('a non-valid blog post cannot be added', async () => {
   expect(blogsAtEnd.length).toBe(helper.initialBlogs.length);
 });
 
+test('removing a single blog post works', async () => {
+  const blogs = await helper.blogsInDb();
+  const id = blogs[0].id;
+
+  await api
+    .delete(`/api/blogs/${id}`)
+    .expect(204);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length - 1);
+});
+
+test('removing a non existing single blog post does not remove anything', async () => {
+  const id = 'beef71f14f2492817beef4c5'
+
+  await api
+    .delete(`/api/blogs/${id}`)
+    .expect(204);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length);
+});
+
+test('updating likes works', async () => {
+  const blogs = await helper.blogsInDb();
+  const blogToUpdate = { ...blogs[0] };
+  blogToUpdate.likes = 200;
+  const id = blogToUpdate.id;
+
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(blogToUpdate)
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
