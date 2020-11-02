@@ -95,7 +95,7 @@ test('removing a single blog post works', async () => {
 });
 
 test('removing a non existing single blog post does not remove anything', async () => {
-  const id = 'beef71f14f2492817beef4c5'
+  const id = 'beef71f14f2492817beef4c5';
 
   await api
     .delete(`/api/blogs/${id}`)
