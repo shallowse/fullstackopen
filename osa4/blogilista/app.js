@@ -3,6 +3,7 @@ const express = require('express');
 require('express-async-errors');
 const app = express();
 const cors = require('cors');
+const loginRouter = require('./controllers/loginController');
 const userRouter = require('./controllers/userController');
 const blogRouter = require('./controllers/blogController');
 const middleware = require('./utils/middleware');
@@ -33,6 +34,7 @@ app.use(cors());
 app.use(express.static('build'));
 app.use(express.json());
 
+app.use('/api/login', loginRouter);
 app.use('/api/users', userRouter);
 app.use('/api/blogs', blogRouter);
 
