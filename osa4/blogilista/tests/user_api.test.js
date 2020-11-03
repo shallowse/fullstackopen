@@ -27,7 +27,7 @@ describe('when there are initially two users at db', () => {
 
     const newUser = {
       username: 'testaajatesteri',
-      name: 'Sami Testaaja',
+      name: 'Johannes Liimatainen',
       password: 'salainen',
     };
 

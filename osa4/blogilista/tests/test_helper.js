@@ -40,13 +40,13 @@ const initialBlogs = [
 
 const initialUsers = [
   {
-    username: 'robertcmartin',
-    name: 'Robert C. Martin',
+    username: 'sannatestaaja',
+    name: 'Sanna Testaaja',
     passwordHash: undefined,
   },
   {
-    username: 'edsgerwdijkstra',
-    name: 'Edsger W. Dijkstra',
+    username: 'seppotester',
+    name: 'Seppo Tester',
     passwordHash: undefined,
   }
 ];
