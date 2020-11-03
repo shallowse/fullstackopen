@@ -11,10 +11,12 @@ describe('when there are initially two users at db', () => {
   beforeEach(async () => {
     await User.deleteMany({});
 
+    // Note: this passwordHash is not necessarily needed, just wanted to have the created test data
+    // resemble the actual data that the backend creates for the database
     // https://stackoverflow.com/a/40140562
     // Promise.all
     const users = await Promise.all(helper.initialUsers.map(async user => {
-      const passwordHash = await bcrypt.hash('secret', 10);
+      const passwordHash = await bcrypt.hash(user.password, 10);
       user.passwordHash = passwordHash;
       return user;
     }));

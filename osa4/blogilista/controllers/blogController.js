@@ -8,6 +8,11 @@ blogRouter.get('/', async (req, res) => {
   res.json(blogs.map(blog => blog.toJSON()));
 });
 
+blogRouter.get('/:id', async (req, res) => {
+  const blog = await Blog.findById(req.params.id).populate('user', { username: 1, name: 1, id: 1 });
+  res.json(blog.toJSON());
+});
+
 blogRouter.post('/', async (req, res) => {
   const body = req.body;
   if (!req.token) {
@@ -36,14 +41,6 @@ blogRouter.post('/', async (req, res) => {
 });
 
 /*
-blogRouter.delete('/:id', async (req, res) => {
-  const id = req.params.id;
-  await Blog.findByIdAndRemove(id);
-  res.status(204).end();
-});
-*/
-
-/*
   1. Fetch user from database
   2. Fetch blog entry to be deleted from database
   3. Compare user.id with blog.user.id
@@ -63,7 +60,7 @@ blogRouter.delete('/:id', async (req, res) => {
   const user = await User.findById(decodedToken.id);
   const blog = await Blog.findById(blogId);
   if (!blog) {
-    return res.status(401).json({ error: 'blog not found' });
+    return res.status(404).json({ error: 'blog not found' });
   }
 
   // Is user authorized to delete a blog post
@@ -74,6 +71,9 @@ blogRouter.delete('/:id', async (req, res) => {
   res.status(204).end();
 });
 
+// Note: the following is assumed
+// PUT functionality stays as is. No authorization check is made
+// as there was no excercise in osa4 for this
 blogRouter.put('/:id', async (req, res) => {
   const id = req.params.id;
   const body = req.body;
