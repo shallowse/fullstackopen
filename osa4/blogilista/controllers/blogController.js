@@ -35,9 +35,42 @@ blogRouter.post('/', async (req, res) => {
   res.status(201).json(savedBlog.toJSON());
 });
 
+/*
 blogRouter.delete('/:id', async (req, res) => {
   const id = req.params.id;
   await Blog.findByIdAndRemove(id);
+  res.status(204).end();
+});
+*/
+
+/*
+  1. Fetch user from database
+  2. Fetch blog entry to be deleted from database
+  3. Compare user.id with blog.user.id
+     if they match => delete blog entry
+     else => user is not authorized to delete the blog entry
+*/
+blogRouter.delete('/:id', async (req, res) => {
+  const blogId = req.params.id;
+  if (!req.token) {
+    return res.status(401).json({ error: 'missing header "Authorization"' });
+  }
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+  if (!(decodedToken && decodedToken.id)) {
+    return res.status(401).json({ error: 'invalid decoded token id' });
+  }
+
+  const user = await User.findById(decodedToken.id);
+  const blog = await Blog.findById(blogId);
+  if (!blog) {
+    return res.status(401).json({ error: 'blog not found' });
+  }
+
+  // Is user authorized to delete a blog post
+  if (String(user._id).localeCompare(blog.user._id.toString()) !== 0) {
+    return res.status(401).json({ error: 'not authorized to delete a blog post' });
+  }
+  await Blog.findByIdAndRemove(blogId);
   res.status(204).end();
 });
 
