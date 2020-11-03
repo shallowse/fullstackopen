@@ -22,7 +22,21 @@ const errorHandler = (err, req, res, next) => {
   next(err);
 };
 
+// Get JSON Web Token from request Header 'Authorization'
+// We expect the value to be 'Authorization': 'Bearer <token>'
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization');
+  const keyword = 'bearer ';
+  if (authorization && authorization.toLowerCase().startsWith(keyword)) {
+    req.token = authorization.substring(keyword.length);
+  } else {
+    req.token = undefined;
+  }
+  next();
+};
+
 module.exports = {
   unknownEndpoint,
   errorHandler,
+  tokenExtractor,
 };

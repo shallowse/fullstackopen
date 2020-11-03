@@ -3,15 +3,6 @@ const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/users');
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization');
-  const keyword = 'bearer ';
-  if (authorization && authorization.toLowerCase().startsWith(keyword)) {
-    return authorization.substring(keyword.length);
-  }
-  return null;
-};
-
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 });
   res.json(blogs.map(blog => blog.toJSON()));
@@ -19,10 +10,12 @@ blogRouter.get('/', async (req, res) => {
 
 blogRouter.post('/', async (req, res) => {
   const body = req.body;
-  const token = getTokenFrom(req);
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  if (!token || !decodedToken.id) {
-    return res.status(401).json({ error: 'token missing or invalid' });
+  if (!req.token) {
+    return res.status(401).json({ error: 'missing header "Authorization"' });
+  }
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+  if (!(decodedToken && decodedToken.id)) {
+    return res.status(401).json({ error: 'invalid decoded token id' });
   }
 
   const user = await User.findById(decodedToken.id);

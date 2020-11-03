@@ -33,12 +33,13 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :p
 app.use(cors());
 app.use(express.static('build'));
 app.use(express.json());
+app.use(middleware.tokenExtractor);
 
 app.use('/api/login', loginRouter);
 app.use('/api/users', userRouter);
 app.use('/api/blogs', blogRouter);
-
 app.use(middleware.unknownEndpoint);
+
 app.use(middleware.errorHandler);
 
 module.exports = app;
