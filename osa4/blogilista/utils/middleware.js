@@ -11,8 +11,12 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).send({ error: 'malformed id' });
   } else if (err.name === 'ValidationError') {
     return res.status(400).json({ error: err.message });
-  } else if (err.name === 'SyntaxError') { // encoutered e.g. while receiving malformed JSON data in POST/PUT
+  } else if (err.name === 'SyntaxError' || err.name === 'TypeError') {
+    // SyntaxError encountered e.g. while receiving malformed JSON data in POST/PUT
+    // TypeError encountered e.g. while submitting data with wrong field name
     return res.status(400).json({ error: err.message });
+  } else if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({ error: 'invalid token' });
   }
 
   next(err);
