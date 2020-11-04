@@ -1,5 +1,6 @@
 import React from 'react';
 import Blog from './Blog';
+import PropTypes from 'prop-types';
 
 const BlogList = ({
   blogs = [],
@@ -20,6 +21,12 @@ const BlogList = ({
       )}
     </div>
   );
+};
+
+BlogList.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  handleUpdateLike: PropTypes.func.isRequired,
+  handleDeleteBlog: PropTypes.func.isRequired,
 };
 
 export default BlogList;
