@@ -6,6 +6,7 @@ import NewBlogForm from './components/NewBlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import Togglable from './components/Togglable';
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
@@ -63,41 +64,32 @@ const App = () => {
     }
   }
 
+  if (user === null) {
+    return <LoginForm handleSubmit={handleLogin} />
+  }
+
   return (
     <>
       <h2>Blogs</h2>
       <Notification message={errorMessage} />
 
       <div>
-        {user === null ?
-          <LoginForm handleSubmit={handleLogin} />
-          :
-          <div>
-            {user.name} logged in{' '}
-            <button onClick={handleLogout}>logout</button>
-          </div>
-        }
+        {user.name} logged in{' '}
+        <button onClick={handleLogout}>logout</button>
       </div>
 
       <br />
 
-      <div>
-        {user !== null &&
-          <Togglable buttonLabel='new note' ref={newBlogFormRef}>
-            <NewBlogForm
-              handleSubmit={handleNewBlog}
-              notifyUser={notifyUser}
-            />
-          </Togglable>
-        }
-      </div>
+      <Togglable buttonLabel='new note' ref={newBlogFormRef}>
+        <NewBlogForm
+          handleSubmit={handleNewBlog}
+          notifyUser={notifyUser}
+        />
+      </Togglable>
 
       <br />
 
-      {
-        user !== null &&
-        <BlogList blogs={blogs} />
-      }
+      <BlogList blogs={blogs} />
     </>
   );
 };
