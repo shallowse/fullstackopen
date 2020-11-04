@@ -216,12 +216,9 @@ describe('Testing Blog API', () => {
     const blogToUpdate = { ...blogs[0] };
     blogToUpdate.likes = 200;
     const blogId = blogToUpdate.id;
-    const blogUserId = blogs[0].user.toString();
-    let userToken = users.find(user => String(user._id).localeCompare(blogUserId) !== 0);
 
     const result = await api
       .put(`/api/blogs/${blogId}`)
-      .set('Authorization', userToken.token)
       .send(blogToUpdate)
       .expect(200)
       .expect('Content-Type', /application\/json/);

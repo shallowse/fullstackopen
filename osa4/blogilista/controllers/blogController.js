@@ -75,14 +75,7 @@ blogRouter.put('/:id', async (req, res) => {
   const blogId = req.params.id;
   const body = req.body;
 
-  if (!req.token) {
-    return res.status(401).json({ error: 'missing header "Authorization" in PUT' });
-  }
-  const decodedToken = jwt.verify(req.token, process.env.SECRET);
-  if (!(decodedToken && decodedToken.id)) {
-    return res.status(401).json({ error: 'invalid decoded token id in PUT' });
-  }
-  const user = await User.findById(decodedToken.id);
+  const user = await User.findById(req.body.user);
 
   const blog = {
     title: body.title,
@@ -92,7 +85,8 @@ blogRouter.put('/:id', async (req, res) => {
     user: user._id,
   };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(blogId, blog, { new: true });
+  const updatedBlog = await Blog.findByIdAndUpdate(blogId, blog, { new: true })
+    .populate('user', { username: 1, name: 1, id: 1 });
   res.status(200).json(updatedBlog.toJSON());
 });
 
