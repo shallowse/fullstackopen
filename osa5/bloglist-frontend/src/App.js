@@ -14,9 +14,6 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const [newBlogTitle, setNewBlogTitle] = useState('');
-  const [newBlogAuthor, setNewBlogAuthor] = useState('');
-  const [newBlogUrl, setNewBlogUrl] = useState('');
   const newBlogFormRef = useRef();
 
   useEffect(() => {
@@ -61,19 +58,8 @@ const App = () => {
     blogService.setToken(null);
   };
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault();
-    if (!(newBlogTitle && newBlogAuthor && newBlogUrl)) {
-      notifyUser('some fields are missing content.')
-      return;
-    }
-
-    const newBlog = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl,
-    };
-
+  const handleNewBlog = async (newBlog) => {
+    newBlogFormRef.current.toggleVisibility();
     try {
       const response = await blogService.postNewBlog(newBlog);
       setBlogs(blogs.concat(response))
@@ -82,11 +68,6 @@ const App = () => {
       console.log(error.response.data.error);
       notifyUser(`Error while posting (POST) new blog to the server: ${error.response.data.error}`)
     }
-
-    setNewBlogTitle('');
-    setNewBlogAuthor('');
-    setNewBlogUrl('');
-    newBlogFormRef.current.toggleVisibility();
   }
 
   return (
@@ -117,13 +98,8 @@ const App = () => {
         {user !== null &&
           <Togglable buttonLabel='new note' ref={newBlogFormRef}>
             <NewBlogForm
-              newBlogTitle={newBlogTitle}
-              newBlogAuthor={newBlogAuthor}
-              newBlogUrl={newBlogUrl}
-              handleSetNewBlogTitle={({ target }) => setNewBlogTitle(target.value)}
-              handleSetNewBlogAuthor={({ target }) => setNewBlogAuthor(target.value)}
-              handleSetNewBlogUrl={({ target }) => setNewBlogUrl(target.value)}
               handleSubmit={handleNewBlog}
+              notifyUser={notifyUser}
             />
           </Togglable>
         }
