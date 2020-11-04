@@ -52,6 +52,7 @@ const App = () => {
     blogService.setToken(null);
   };
 
+  // POST
   const handleNewBlog = async (newBlog) => {
     newBlogFormRef.current.toggleVisibility();
     try {
@@ -64,6 +65,7 @@ const App = () => {
     }
   }
 
+  // PUT
   const handleUpdateLike = async (updateBlogId, updateBlog) => {
     try {
       const response = await blogService.updateBlog(updateBlogId, updateBlog);
@@ -72,6 +74,18 @@ const App = () => {
       notifyUser(`Updated ${response.title}`);
     } catch (error) {
       notifyUser(`Error while updating (PUT) blog to the server: ${error.response.data.error}`)
+    }
+  };
+
+  // DELETE
+  const handleDeleteBlog = async (deleteBlog) => {
+    //console.log(deleteBlog);
+    try {
+      await blogService.deleteBlog(deleteBlog.id);
+      setBlogs(blogs.filter(blog => blog.id !== deleteBlog.id));
+      notifyUser(`Deleted ${deleteBlog.title}`);
+    } catch (error) {
+      notifyUser(`Error while deleting (DELETE) blog from the server: ${error.response.data.error}`)
     }
   };
 
@@ -103,6 +117,7 @@ const App = () => {
       <BlogList
         blogs={blogs}
         handleUpdateLike={handleUpdateLike}
+        handleDeleteBlog={handleDeleteBlog}
       />
     </>
   );
