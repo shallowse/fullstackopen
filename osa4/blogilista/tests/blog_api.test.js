@@ -211,8 +211,6 @@ describe('Testing Blog API', () => {
     expect(blogsAtEnd.length).toBe(helper.initialBlogs.length);
   });
 
-  // Note: PUT does not yet implement token authorization check
-  // Token authorization is implemented here for preparing to the future
   test('updating likes works', async () => {
     const blogs = await helper.blogsInDb();
     const blogToUpdate = { ...blogs[0] };

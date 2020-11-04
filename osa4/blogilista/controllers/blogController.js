@@ -71,21 +71,28 @@ blogRouter.delete('/:id', async (req, res) => {
   res.status(204).end();
 });
 
-// Note: the following is assumed
-// PUT functionality stays as is. No authorization check is made
-// as there was no excercise in osa4 for this
 blogRouter.put('/:id', async (req, res) => {
-  const id = req.params.id;
+  const blogId = req.params.id;
   const body = req.body;
+
+  if (!req.token) {
+    return res.status(401).json({ error: 'missing header "Authorization" in PUT' });
+  }
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+  if (!(decodedToken && decodedToken.id)) {
+    return res.status(401).json({ error: 'invalid decoded token id in PUT' });
+  }
+  const user = await User.findById(decodedToken.id);
 
   const blog = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes,
+    user: user._id,
   };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true });
+  const updatedBlog = await Blog.findByIdAndUpdate(blogId, blog, { new: true });
   res.status(200).json(updatedBlog.toJSON());
 });
 
