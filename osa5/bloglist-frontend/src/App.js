@@ -56,13 +56,24 @@ const App = () => {
     newBlogFormRef.current.toggleVisibility();
     try {
       const response = await blogService.postNewBlog(newBlog);
-      setBlogs(blogs.concat(response))
-      notifyUser(`Added ${response.title}`)
+      setBlogs(blogs.concat(response));
+      notifyUser(`Added ${response.title}`);
     } catch (error) {
       console.log(error.response.data.error);
       notifyUser(`Error while posting (POST) new blog to the server: ${error.response.data.error}`)
     }
   }
+
+  const handleUpdateLike = async (updateBlogId, updateBlog) => {
+    try {
+      const response = await blogService.updateBlog(updateBlogId, updateBlog);
+      //console.log('RESPONSE ::', response);
+      setBlogs(blogs.map(blog => blog.id !== updateBlogId ? blog : response));
+      notifyUser(`Updated ${response.title}`);
+    } catch (error) {
+      notifyUser(`Error while updating (PUT) blog to the server: ${error.response.data.error}`)
+    }
+  };
 
   if (user === null) {
     return <LoginForm handleSubmit={handleLogin} />
@@ -89,7 +100,10 @@ const App = () => {
 
       <br />
 
-      <BlogList blogs={blogs} />
+      <BlogList
+        blogs={blogs}
+        handleUpdateLike={handleUpdateLike}
+      />
     </>
   );
 };

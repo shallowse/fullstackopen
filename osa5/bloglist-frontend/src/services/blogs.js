@@ -20,9 +20,15 @@ const postNewBlog = async (newBlog = {}) => {
   return response.data;
 };
 
+const updateBlog = async (blogId = '', updateBlog = {}) => {
+  const response = await axios.put(`${baseUrl}/${blogId}`, updateBlog);
+  return response.data;
+};
+
 const exportBundle = {
   getAll,
   postNewBlog,
+  updateBlog,
   setToken,
 }
 

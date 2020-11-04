@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({
+  blog = {},
+  handleUpdateLike = f => f,
+}) => {
   const [showAll, setShowAll] = useState(false);
 
   const blogStyle = {
@@ -11,13 +14,25 @@ const Blog = ({ blog }) => {
     marginBottom: '5px',
   };
 
+  const handleLike = async (blogTarget) => {
+    //console.log(blogTarget);
+    const blogUpdate = {
+      likes: blogTarget.likes + 1,
+      title: blogTarget.title,
+      author: blogTarget.author,
+      url: blogTarget.url,
+      user: blogTarget.user.id,
+    }
+    handleUpdateLike(blogTarget.id, blogUpdate);
+  };
+
   if (showAll) {
     return (
       <div style={blogStyle}>
         {blog.title} {blog.author}{' ' }
         <button onClick={() => setShowAll(!showAll)}>hide</button><br />
         {blog.url}<br />
-        likes{' '}{blog.likes}{' '}<button>like</button><br />
+        likes{' '}{blog.likes}{' '}<button onClick={() => handleLike(blog)}>like</button><br />
         {blog.user.name}{' '}
       </div>
     );
