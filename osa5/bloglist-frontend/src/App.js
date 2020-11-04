@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import Notification from './components/Notification';
+import LoginForm from './components/LoginForm';
+import NewBlogForm from './components/NewBlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -88,30 +90,13 @@ const App = () => {
 
       <div>
         {user === null ?
-          <>
-            <h2>Log in to application</h2>
-            <form onSubmit={handleLogin}>
-              <div>
-                username:{' '}
-                <input
-                  type='text'
-                  value={username}
-                  name='username'
-                  onChange={({ target }) => setUsername(target.value)}
-                />
-              </div>
-              <div>
-                password:{' '}
-                <input
-                  type='password'
-                  value={password}
-                  name='password'
-                  onChange={({ target }) => setPassword(target.value)}
-                />
-              </div>
-              <button type='submit'>login</button>
-            </form>
-          </>
+          <LoginForm
+            username={username}
+            password={password}
+            handleSetUsername={({ target }) => setUsername(target.value)}
+            handleSetPassword={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
           :
           <div>
             {user.name} logged in{' '}
@@ -122,38 +107,15 @@ const App = () => {
 
       <div>
         {user !== null &&
-          <>
-            <h2>create new</h2>
-            <form onSubmit={handleNewBlog}>
-              <div>
-                title:{' '}
-                <input
-                  type='text'
-                  value={newBlogTitle}
-                  onChange={({ target }) => setNewBlogTitle(target.value)}
-                />
-              </div>
-
-              <div>
-                author:{' '}
-                <input
-                  type='text'
-                  value={newBlogAuthor}
-                  onChange={({ target }) => setNewBlogAuthor(target.value)}
-                />
-              </div>
-
-              <div>
-                url:{' '}
-                <input
-                  type='text'
-                  value={newBlogUrl}
-                  onChange={({ target }) => setNewBlogUrl(target.value)}
-                />
-              </div>
-              <button type='submit'>create</button>
-            </form>
-          </>
+          <NewBlogForm
+            newBlogTitle={newBlogTitle}
+            newBlogAuthor={newBlogAuthor}
+            newBlogUrl={newBlogUrl}
+            handleSetNewBlogTitle={({ target }) => setNewBlogTitle(target.value)}
+            handleSetNewBlogAuthor={({ target }) => setNewBlogAuthor(target.value)}
+            handleSetNewBlogUrl={({ target }) => setNewBlogUrl(target.value)}
+            handleSubmit={handleNewBlog}
+          />
         }
       </div>
 
