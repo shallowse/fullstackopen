@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
 import NewBlogForm from './components/NewBlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -16,6 +17,7 @@ const App = () => {
   const [newBlogTitle, setNewBlogTitle] = useState('');
   const [newBlogAuthor, setNewBlogAuthor] = useState('');
   const [newBlogUrl, setNewBlogUrl] = useState('');
+  const newBlogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs));
@@ -84,10 +86,12 @@ const App = () => {
     setNewBlogTitle('');
     setNewBlogAuthor('');
     setNewBlogUrl('');
+    newBlogFormRef.current.toggleVisibility();
   }
 
   return (
     <>
+      <h2>Blogs</h2>
       <Notification message={errorMessage} />
 
       <div>
@@ -107,24 +111,29 @@ const App = () => {
         }
       </div>
 
+      <br />
+
       <div>
         {user !== null &&
-          <NewBlogForm
-            newBlogTitle={newBlogTitle}
-            newBlogAuthor={newBlogAuthor}
-            newBlogUrl={newBlogUrl}
-            handleSetNewBlogTitle={({ target }) => setNewBlogTitle(target.value)}
-            handleSetNewBlogAuthor={({ target }) => setNewBlogAuthor(target.value)}
-            handleSetNewBlogUrl={({ target }) => setNewBlogUrl(target.value)}
-            handleSubmit={handleNewBlog}
-          />
+          <Togglable buttonLabel='new note' ref={newBlogFormRef}>
+            <NewBlogForm
+              newBlogTitle={newBlogTitle}
+              newBlogAuthor={newBlogAuthor}
+              newBlogUrl={newBlogUrl}
+              handleSetNewBlogTitle={({ target }) => setNewBlogTitle(target.value)}
+              handleSetNewBlogAuthor={({ target }) => setNewBlogAuthor(target.value)}
+              handleSetNewBlogUrl={({ target }) => setNewBlogUrl(target.value)}
+              handleSubmit={handleNewBlog}
+            />
+          </Togglable>
         }
       </div>
+
+      <br />
 
       {
         user !== null &&
         <div>
-          <h2>Blogs</h2>
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
           )}
