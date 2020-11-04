@@ -5,9 +5,11 @@ const BlogList = ({
   blogs = [],
   handleUpdateLike = f => f,
 }) => {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+  const sortedBlogs = blogs.sort((a, b) => Number(b.likes) - Number(a.likes));
   return (
     <div>
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog
           key={blog.id}
           blog={blog}
