@@ -43,6 +43,7 @@ const App = () => {
       const user = await loginService.login({ username, password });
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user));
       setUser(user);
+      blogService.setToken(user.token);
     } catch (error) {
       notifyUser('wrong username or password');
       console.log(error);
@@ -55,6 +56,7 @@ const App = () => {
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem('loggedBlogAppUser');
+    blogService.setToken(null);
   };
 
   const handleNewBlog = async (event) => {
