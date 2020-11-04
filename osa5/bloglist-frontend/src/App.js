@@ -61,9 +61,9 @@ const App = () => {
       notifyUser(`Added ${response.title}`);
     } catch (error) {
       console.log(error.response.data.error);
-      notifyUser(`Error while posting (POST) new blog to the server: ${error.response.data.error}`)
+      notifyUser(`Error while posting (POST) new blog to the server: ${error.response.data.error}`);
     }
-  }
+  };
 
   // PUT
   const handleUpdateLike = async (updateBlogId, updateBlog) => {
@@ -73,7 +73,7 @@ const App = () => {
       setBlogs(blogs.map(blog => blog.id !== updateBlogId ? blog : response));
       notifyUser(`Updated ${response.title}`);
     } catch (error) {
-      notifyUser(`Error while updating (PUT) blog to the server: ${error.response.data.error}`)
+      notifyUser(`Error while updating (PUT) blog to the server: ${error.response.data.error}`);
     }
   };
 
@@ -85,12 +85,12 @@ const App = () => {
       setBlogs(blogs.filter(blog => blog.id !== deleteBlog.id));
       notifyUser(`Deleted ${deleteBlog.title}`);
     } catch (error) {
-      notifyUser(`Error while deleting (DELETE) blog from the server: ${error.response.data.error}`)
+      notifyUser(`Error while deleting (DELETE) blog from the server: ${error.response.data.error}`);
     }
   };
 
   if (user === null) {
-    return <LoginForm handleSubmit={handleLogin} />
+    return <LoginForm handleSubmit={handleLogin} />;
   }
 
   return (

@@ -8,7 +8,7 @@ const setToken = (newToken) => {
 };
 
 const getAll = async () => {
-  const response = await axios.get(baseUrl)
+  const response = await axios.get(baseUrl);
   return response.data;
 };
 
@@ -30,7 +30,7 @@ const deleteBlog = async (blogId = '') => {
     headers: { Authorization: token },
   };
   await axios.delete(`${baseUrl}/${blogId}`, config);
-}
+};
 
 const exportBundle = {
   getAll,
@@ -38,6 +38,6 @@ const exportBundle = {
   updateBlog,
   deleteBlog,
   setToken,
-}
+};
 
 export default exportBundle;

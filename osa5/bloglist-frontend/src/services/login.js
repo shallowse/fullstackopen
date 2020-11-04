@@ -8,6 +8,6 @@ const login = async (credentials) => {
 
 const exportBundle = {
   login,
-}
+};
 
 export default exportBundle;

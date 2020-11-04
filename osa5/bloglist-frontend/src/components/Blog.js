@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const Blog = ({
   blog = {},
@@ -31,7 +31,7 @@ const Blog = ({
       author: blogTarget.author,
       url: blogTarget.url,
       user: blogTarget.user.id,
-    }
+    };
 
     handleUpdateLike(blogTarget.id, blogUpdate);
   };

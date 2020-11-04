@@ -11,7 +11,7 @@ const NewBlogForm = ({
   const handleNewBlog = (event) => {
     event.preventDefault();
     if (!(newBlogTitle && newBlogAuthor && newBlogUrl)) {
-      notifyUser('some fields are missing content.')
+      notifyUser('some fields are missing content.');
       return;
     }
 
@@ -62,7 +62,7 @@ const NewBlogForm = ({
       </form>
     </div>
   );
-}
+};
 
 
 export default NewBlogForm;
