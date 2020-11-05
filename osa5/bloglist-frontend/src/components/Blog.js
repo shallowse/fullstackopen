@@ -49,10 +49,15 @@ const Blog = ({
     return (
       <div style={blogStyle}>
         {blog.title} {blog.author}{' '}
-        <button onClick={() => setShowAll(!showAll)}>hide</button><br />
-        {blog.url}<br />
-        likes{' '}{blog.likes}{' '}<button onClick={() => handleLike(blog)}>like</button><br />
-        {blog.user.name}{' '}<br />
+        <button onClick={() => setShowAll(!showAll)}>hide</button>{' '}
+        <br />
+        {blog.url}{' '}
+        <br />
+        likes{' '}{blog.likes}{' '}
+        <button className='likeButton' onClick={() => handleLike(blog)}>like</button>
+        <br />
+        {blog.user.name}{' '}
+        <br />
         <button style={removeButtonStyle} onClick={() => handleRemove(blog)}>remove</button>
       </div>
     );
@@ -60,7 +65,7 @@ const Blog = ({
     return (
       <div style={blogStyle}>
         {blog.title} {blog.author}{' '}
-        <button onClick={() => setShowAll(!showAll)}>view</button>
+        <button className='viewAllButton' onClick={() => setShowAll(!showAll)}>view</button>
       </div>
     );
   }
