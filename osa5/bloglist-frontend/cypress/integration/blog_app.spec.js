@@ -10,7 +10,7 @@ describe('Blog app', function () {
     cy.visit('http://localhost:3000');
   });
 
-  it('front page can be opened', function () {
+  it.only('Login form is shown', function () {
     cy.contains('Log in to application');
   });
 
