@@ -225,9 +225,8 @@ describe('Testing Blog API', () => {
 
     expect(result.body.likes).toBe(200);
   });
-
-  afterAll(() => {
-    mongoose.connection.close();
-  });
 });
 
+afterAll(() => {
+  mongoose.connection.close();
+});
