@@ -6,11 +6,11 @@ Cypress.Commands.add('login', ({ username, password }) => {
     });
 });
 
-Cypress.Commands.add('createNewBlog', ({ title, author, url }) => {
+Cypress.Commands.add('createNewBlog', ({ title, author, url, likes = 0 }) => {
   cy.request({
     url: 'http://localhost:3001/api/blogs',
     method: 'POST',
-    body: { title, author, url },
+    body: { title, author, url, likes },
     headers: {
       'Authorization': `bearer ${JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token}`
     }

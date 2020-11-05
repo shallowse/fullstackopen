@@ -10,7 +10,7 @@ const BlogList = ({
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
   const sortedBlogs = blogs.sort((a, b) => Number(b.likes) - Number(a.likes));
   return (
-    <div>
+    <div className='blogList'>
       {sortedBlogs.map(blog =>
         <Blog
           key={blog.id}

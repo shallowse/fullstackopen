@@ -47,7 +47,7 @@ const Blog = ({
 
   if (showAll) {
     return (
-      <div style={blogStyle}>
+      <div className='blogEntry' style={blogStyle}>
         {blog.title} {blog.author}{' '}
         <button onClick={() => setShowAll(!showAll)}>hide</button>{' '}
         <br />
@@ -63,7 +63,7 @@ const Blog = ({
     );
   } else {
     return (
-      <div style={blogStyle}>
+      <div className='blogEntry' style={blogStyle}>
         {blog.title} {blog.author}{' '}
         <button className='viewAllButton' onClick={() => setShowAll(!showAll)}>view</button>
       </div>
