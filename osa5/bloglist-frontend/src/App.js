@@ -90,7 +90,12 @@ const App = () => {
   };
 
   if (user === null) {
-    return <LoginForm handleSubmit={handleLogin} />;
+    return (
+      <>
+        <Notification message={errorMessage} />
+        <LoginForm handleSubmit={handleLogin} />
+      </>
+    );
   }
 
   return (
