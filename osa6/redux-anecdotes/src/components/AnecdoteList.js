@@ -5,7 +5,7 @@ import { voteAnecdote } from '../reducers/anecdoteReducer';
 const Anecdotes = () => {
   const dispatch = useDispatch();
   const anecdotes = useSelector(({ anecdotes, filter }) => {
-    console.log('filter', filter);
+    //console.log('filter', filter);
     if (filter === '') {
       return anecdotes;
     }
