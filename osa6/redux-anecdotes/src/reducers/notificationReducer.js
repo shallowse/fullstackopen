@@ -4,17 +4,26 @@
 */
 const notificationReducer = (state = 'INITIAL NOTIFICATION', action) => {
   //console.log('notificationReducer :: ', action);
-  const content = action.data && action.data.content;
-
   switch (action.type) {
-    case 'VOTE':
-      return `you voted '${content}'`;
-    case 'NEW_ANECDOTE': {
-      return `you added '${content}'`;
-    }
+    case 'SET_NOTIFICATION':
+      return action.data.text;
+    case 'CLEAR_NOTIFICATION':
+      return '';
     default:
       return state;
   }
+};
+
+export const setNotification = (text = '', duration = 5000) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      data: { text },
+    });
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR_NOTIFICATION' });
+    }, duration * 1000);
+  };
 };
 
 export default notificationReducer;
