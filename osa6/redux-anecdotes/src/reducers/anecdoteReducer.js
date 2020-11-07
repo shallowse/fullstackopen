@@ -1,3 +1,11 @@
+/*
+  State Model:
+  {
+    content: String
+    id: String
+    votes: Number
+  }
+*/
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -19,9 +27,10 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
-const reducer = (state = initialState, action) => {
-  console.log('state now: ', state);
-  console.log('action', action);
+const anecdoteReducer = (state = initialState, action) => {
+  //console.log('state now: ', state);
+  //console.log('action', action);
+  //console.log('anecdoteReducer ::', action);
 
   switch (action.type) {
     case 'VOTE': {
@@ -42,10 +51,10 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export const voteAnecdote = (id) => {
+export const voteAnecdote = (anecdote) => {
   return {
     type: 'VOTE',
-    data: { id },
+    data: { content: anecdote.content, id: anecdote.id },
   };
 };
 
@@ -56,4 +65,4 @@ export const createNewAnecdote = (content) => {
   };
 };
 
-export default reducer;
+export default anecdoteReducer;

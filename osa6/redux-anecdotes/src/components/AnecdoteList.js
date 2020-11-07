@@ -4,7 +4,13 @@ import { voteAnecdote } from '../reducers/anecdoteReducer';
 
 const Anecdotes = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector(state => state);
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    console.log('filter', filter);
+    if (filter === '') {
+      return anecdotes;
+    }
+    return anecdotes.filter(n => n.content.toLowerCase().includes(filter.toLowerCase()));
+  });
 
   anecdotes.sort((a, b) => Number(b.votes) - Number(a.votes));
 
@@ -18,7 +24,7 @@ const Anecdotes = () => {
             </div>
             <div>
               has {anecdote.votes}{' '}
-              <button onClick={() => dispatch(voteAnecdote(anecdote.id))}>vote</button>
+              <button onClick={() => dispatch(voteAnecdote(anecdote))}>vote</button>
             </div>
           </div>
         )
