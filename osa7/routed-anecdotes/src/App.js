@@ -122,9 +122,18 @@ const App = () => {
   const [notification, setNotification] = useState('');
 
   const match = useRouteMatch('/anecdotes/:id');
-  const anecdote = match
+  let anecdote = match
     ? anecdotes.find(a => Number(a.id) === Number(match.params.id))
     : null;
+  // Was the given :id valid? if not, then we inform the user
+  if (anecdote === undefined) {
+    anecdote = {
+      content: 'A nonvalid anecdote :id path was given',
+      votes: 0,
+      info: 'ERROR'
+    };
+  }
+  console.log(anecdote, typeof anecdote);
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
