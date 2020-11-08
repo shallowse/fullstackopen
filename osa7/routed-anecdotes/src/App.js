@@ -3,7 +3,6 @@ import {
   Switch,
   Route,
   Link,
-  // Redirect,
   useRouteMatch,
   useHistory,
 } from 'react-router-dom';
