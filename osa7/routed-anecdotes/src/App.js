@@ -62,14 +62,20 @@ const Footer = () => {
 };
 
 const CreateNew = (props) => {
-  const content = useField('text');
-  const author = useField('text');
-  const info = useField('text');
+  // Renaming fields for object destructuring
+  // https://flaviocopes.com/how-to-rename-object-destructuring/
+  const { reset: contentReset, ...content } = useField('text');
+  const { reset: authorReset, ...author } = useField('text');
+  const { reset: infoReset, ...info } = useField('text');
+
 
   const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (content.value === '' || author.value === '' || info.value === '') {
+      return;
+    }
     props.addNew({
       content: content.value,
       author: author.value,
@@ -77,6 +83,13 @@ const CreateNew = (props) => {
       votes: 0
     });
     history.push('/');
+  };
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    contentReset();
+    authorReset();
+    infoReset();
   };
 
   return (
@@ -95,7 +108,7 @@ const CreateNew = (props) => {
           url for more info{' '}
           <input name='info' {...info} />
         </div>
-        <button>create</button>
+        <button>create</button>{' '}<button onClick={handleReset}>reset</button>
       </form>
     </div>
   );
