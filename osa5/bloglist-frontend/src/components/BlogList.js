@@ -8,7 +8,7 @@ const BlogList = ({
   handleDeleteBlog = f => f,
 }) => {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-  // https://redux.js.org/tutorials/essentials/part-4-using-data
+  // https://redux.js.org/tutorials/essentials/part-4-using-data#sorting-the-posts-list
   const sortedBlogs = blogs.slice().sort((a, b) => Number(b.likes) - Number(a.likes));
 
   return (

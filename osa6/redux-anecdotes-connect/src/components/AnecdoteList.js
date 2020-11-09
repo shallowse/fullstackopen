@@ -9,7 +9,7 @@ const Anecdotes = (props) => {
     props.setNotification(`you voted '${anecdote.content}'`, 5);
   };
 
-  // https://redux.js.org/tutorials/essentials/part-4-using-data
+  // https://redux.js.org/tutorials/essentials/part-4-using-data#sorting-the-posts-list
   const sortedAnecdotes = props.anecdotes.slice().sort((a, b) => Number(b.votes) - Number(a.votes));
 
   return (
