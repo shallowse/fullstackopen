@@ -13,7 +13,8 @@ const Anecdotes = () => {
     return anecdotes.filter(n => n.content.toLowerCase().includes(filter.toLowerCase()));
   });
 
-  anecdotes.sort((a, b) => Number(b.votes) - Number(a.votes));
+  // https://redux.js.org/tutorials/essentials/part-4-using-data
+  const sortedAnecdotes = anecdotes.slice().sort((a, b) => Number(b.votes) - Number(a.votes));
 
   const handleClick = (anecdote) => {
     dispatch(voteAnecdote(anecdote));
@@ -23,7 +24,7 @@ const Anecdotes = () => {
   return (
     <div>
       {
-        anecdotes.map(anecdote =>
+        sortedAnecdotes.map(anecdote =>
           <div key={anecdote.id} style={{ marginTop: '5px' }}>
             <div>
               {anecdote.content}

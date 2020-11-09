@@ -9,12 +9,13 @@ const Anecdotes = (props) => {
     props.setNotification(`you voted '${anecdote.content}'`, 5);
   };
 
-  props.anecdotes.sort((a, b) => Number(b.votes) - Number(a.votes));
+  // https://redux.js.org/tutorials/essentials/part-4-using-data
+  const sortedAnecdotes = props.anecdotes.slice().sort((a, b) => Number(b.votes) - Number(a.votes));
 
   return (
     <div>
       {
-        props.anecdotes.map(anecdote =>
+        sortedAnecdotes.map(anecdote =>
           <div key={anecdote.id} style={{ marginTop: '5px' }}>
             <div>
               {anecdote.content}
