@@ -1,15 +1,32 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-const LoginForm = ({
-  handleSubmit = f => f,
-}) => {
+import { loginUser } from '../reducers/userSlice';
+import { notificationAdded } from '../reducers/notificationSlice';
+
+const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const loginStatus = useSelector(state => state.user.status);
+  const error = useSelector(state => state.user.error);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (loginStatus === 'failed') {
+      console.log(error);
+      dispatch(notificationAdded('wrong username or password'));
+      setTimeout(() => {
+        dispatch(notificationAdded(''));
+      }, 5000);
+    }
+  }, [loginStatus, dispatch]);
+
+
   const handleLogin = (event) => {
     event.preventDefault();
-    handleSubmit(username, password);
+    dispatch(loginUser({ username, password }));
     setUsername('');
     setPassword('');
   };
@@ -40,10 +57,6 @@ const LoginForm = ({
       </form>
     </div>
   );
-};
-
-LoginForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
