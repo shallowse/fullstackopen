@@ -17,15 +17,15 @@ const initialState = {
 
 // LOGIN
 export const loginUser = createAsyncThunk(
-  'user/loginUser',
+  'login/loginUser',
   async ({ username, password }) => {
     const user = await loginService.login({ username, password });
     return user;
   }
 );
 
-const userSlice = createSlice({
-  name: 'user',
+const loginUserSlice = createSlice({
+  name: 'login',
   initialState,
   reducers: {
     logoutUser(state) {
@@ -35,7 +35,7 @@ const userSlice = createSlice({
       state.status = 'idle';
       state.error = null;
     },
-    setUser(state, action) {
+    setLoginUser(state, action) {
       const user = action.payload;
       blogService.setToken(user.token);
       state.user = user;
@@ -58,6 +58,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutUser, setUser } = userSlice.actions;
+export const { logoutUser, setLoginUser } = loginUserSlice.actions;
 
-export default userSlice.reducer;
+export default loginUserSlice.reducer;

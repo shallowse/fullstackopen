@@ -1,17 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 
-//import { notificationAdded } from './reducers/notificationSlice';
-import { setUser, logoutUser } from './reducers/userSlice';
+import { setLoginUser } from './reducers/loginUserSlice';
 
+import Navbar from './components/Navbar';
 import BlogList from './components/BlogList';
+import Blog from './components/Blog';
+import UserList from './components/UserList';
+import User from './components/User';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
 import NewBlogForm from './components/NewBlogForm';
 import Togglable from './components/Togglable';
 
 const App = () => {
-  const user = useSelector(state => state.user.user);
+  const user = useSelector(state => state.login.user);
 
   const newBlogFormRef = useRef();
 
@@ -21,13 +30,9 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser');
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      dispatch(setUser(user));
+      dispatch(setLoginUser(user));
     }
   }, []);
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  };
 
   if (user === null) {
     return (
@@ -39,25 +44,30 @@ const App = () => {
   }
 
   return (
-    <section>
-      <h2>Blogs</h2>
+    <Router>
+      <Navbar />
+      <h2>Blog app</h2>
       <Notification />
-
-      <div>
-        {user.name} logged in{' '}
-        <button onClick={handleLogout}>logout</button>
-      </div>
-
-      <br />
-
-      <Togglable buttonLabel='new note' ref={newBlogFormRef}>
-        <NewBlogForm />
-      </Togglable>
-
-      <br />
-
-      <BlogList />
-    </section>
+      <Switch>
+        <Route
+          exact
+          path='/'
+          render={() => (
+            <>
+              <Togglable buttonLabel='new note' ref={newBlogFormRef}>
+                <NewBlogForm />
+              </Togglable>
+              <br />
+              <BlogList />
+            </>
+          )}
+        />
+        <Route exact path='/blogs/:blogId' component={Blog} />
+        <Route exact path='/users' component={UserList} />
+        <Route exact path='/users/:userId' component={User} />
+        <Redirect to='/' />
+      </Switch>
+    </Router>
   );
 };
 

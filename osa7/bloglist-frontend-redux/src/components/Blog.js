@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { updateBlogs, deleteBlogs } from '../reducers/blogsSlice';
 
@@ -19,8 +20,9 @@ const removeButtonStyle = {
   borderColor: 'transparent',
 };
 
-const Blog = ({ blog = {} }) => {
-  const [showAll, setShowAll] = useState(false);
+const Blog = ({ match }) => {
+  const { blogId } = match.params;
+  const blog = useSelector(state => state.blogs.blogs.find(n => n.id === blogId));
 
   const dispatch = useDispatch();
 
@@ -44,30 +46,22 @@ const Blog = ({ blog = {} }) => {
     dispatch(deleteBlogs(blogTarget));
   };
 
-  if (showAll) {
-    return (
-      <div className='blogEntry' style={blogStyle}>
-        {blog.title} {blog.author}{' '}
-        <button onClick={() => setShowAll(!showAll)}>hide</button>{' '}
-        <br />
-        {blog.url}{' '}
-        <br />
+  if (!blog) {
+    return <h1>Maybe blogs have not been downloaded yet?</h1>;
+  }
+
+  return (
+    <div className='blogEntry' style={blogStyle}>
+      <h2>{blog.title} {blog.author}</h2>
+      <p><Link to={blog.url}>{blog.url}</Link></p>
+      <p>
         likes{' '}{blog.likes}{' '}
         <button className='likeButton' onClick={() => handleLike(blog)}>like</button>
-        <br />
-        {blog.user.name}{' '}
-        <br />
-        <button style={removeButtonStyle} onClick={() => handleRemove(blog)}>remove</button>
-      </div>
-    );
-  } else {
-    return (
-      <div className='blogEntry' style={blogStyle}>
-        {blog.title} {blog.author}{' '}
-        <button className='viewAllButton' onClick={() => setShowAll(!showAll)}>view</button>
-      </div>
-    );
-  }
+      </p>
+      <p>added by {blog.user.name}</p>
+      <button style={removeButtonStyle} onClick={() => handleRemove(blog)}>remove</button>
+    </div>
+  );
 };
 
 export default Blog;

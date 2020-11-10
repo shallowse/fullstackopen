@@ -1,10 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import Blog from './Blog';
+import { Link } from 'react-router-dom';
 
 import { getBlogs } from '../reducers/blogsSlice';
 import { notificationAdded } from '../reducers/notificationSlice';
+
+const blogStyle = {
+  paddingTop: '10px',
+  paddingLeft: '2px',
+  paddingBottom: '5px',
+  border: 'solid',
+  borderWidth: '1px',
+  marginBottom: '5px',
+};
 
 const BlogList = () => {
   const dispatch = useDispatch();
@@ -32,7 +40,13 @@ const BlogList = () => {
     const sortedBlogs = blogs.slice().sort((a, b) => Number(b.likes) - Number(a.likes));
     content =
       (<div className='blogList'>
-        {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+        {sortedBlogs.map(blog =>
+          <div className='blogEntry' style={blogStyle} key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>
+              {blog.title} {blog.author}{' '}
+            </Link>
+          </div>
+        )}
       </div>);
   } else if (blogsStatus === 'failed') {
     content = <h3>Please reload and try again...</h3>;

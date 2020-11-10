@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loginUser } from '../reducers/userSlice';
+import { loginUser } from '../reducers/loginUserSlice';
 import { notificationAdded } from '../reducers/notificationSlice';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const loginStatus = useSelector(state => state.user.status);
-  const error = useSelector(state => state.user.error);
+  const loginStatus = useSelector(state => state.login.status);
+  const error = useSelector(state => state.login.error);
 
   const dispatch = useDispatch();
 
