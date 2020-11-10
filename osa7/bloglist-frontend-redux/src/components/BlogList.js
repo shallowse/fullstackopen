@@ -1,33 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Blog from './Blog';
-import PropTypes from 'prop-types';
 
-const BlogList = ({
-  blogs = [],
-  handleUpdateLike = f => f,
-  handleDeleteBlog = f => f,
-}) => {
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-  // https://redux.js.org/tutorials/essentials/part-4-using-data#sorting-the-posts-list
-  const sortedBlogs = blogs.slice().sort((a, b) => Number(b.likes) - Number(a.likes));
+import { getBlogs } from '../reducers/blogsSlice';
+import { notificationAdded } from '../reducers/notificationSlice';
+
+const BlogList = () => {
+  const dispatch = useDispatch();
+  const blogs = useSelector(state => state.blogs.blogs);
+
+  const blogsStatus = useSelector(state => state.blogs.status);
+  const error = useSelector(state => state.blogs.error);
+
+  useEffect(() => {
+    if (blogsStatus === 'idle') {
+      dispatch(getBlogs());
+    } else if (blogsStatus === 'failed') {
+      dispatch(notificationAdded(error));
+      setTimeout(() => {
+        dispatch(notificationAdded(''));
+      }, 5000);
+    }
+  }, [blogsStatus, error, dispatch]);
+
+  let content = null;
+
+  if (blogsStatus === 'loading') {
+    content = <div>Loading ...</div>;
+  } else if (blogsStatus === 'succeeded') {
+    const sortedBlogs = blogs.slice().sort((a, b) => Number(b.likes) - Number(a.likes));
+    content =
+      (<div className='blogList'>
+        {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+      </div>);
+  } else if (blogsStatus === 'failed') {
+    content = <h3>Please reload and try again...</h3>;
+  }
+
   return (
-    <div className='blogList'>
-      {sortedBlogs.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleUpdateLike={handleUpdateLike}
-          handleDeleteBlog={handleDeleteBlog}
-        />
-      )}
-    </div>
+    <section>
+      {content}
+    </section>
   );
-};
-
-BlogList.propTypes = {
-  blogs: PropTypes.array.isRequired,
-  handleUpdateLike: PropTypes.func.isRequired,
-  handleDeleteBlog: PropTypes.func.isRequired,
 };
 
 export default BlogList;

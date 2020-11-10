@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { notificationAdded } from './reducers/notificationSlice';
+
 import BlogList from './components/BlogList';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
@@ -8,15 +12,11 @@ import loginService from './services/login';
 import Togglable from './components/Togglable';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const newBlogFormRef = useRef();
 
-  useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs));
-  }, []);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser');
@@ -28,9 +28,9 @@ const App = () => {
   }, []);
 
   const notifyUser = (message) => {
-    setErrorMessage(message);
+    dispatch(notificationAdded(message));
     setTimeout(() => {
-      setErrorMessage(null);
+      dispatch(notificationAdded(''));
     }, 5000);
   };
 
@@ -52,56 +52,19 @@ const App = () => {
     blogService.setToken(null);
   };
 
-  // POST
-  const handleNewBlog = async (newBlog) => {
-    newBlogFormRef.current.toggleVisibility();
-    try {
-      const response = await blogService.postNewBlog(newBlog);
-      setBlogs(blogs.concat(response));
-      notifyUser(`Added ${response.title}`);
-    } catch (error) {
-      console.log(error.response.data.error);
-      notifyUser(`Error while posting (POST) new blog to the server: ${error.response.data.error}`);
-    }
-  };
-
-  // PUT
-  const handleUpdateLike = async (updateBlogId, updateBlog) => {
-    try {
-      const response = await blogService.updateBlog(updateBlogId, updateBlog);
-      //console.log('RESPONSE ::', response);
-      setBlogs(blogs.map(blog => blog.id !== updateBlogId ? blog : response));
-      notifyUser(`Updated ${response.title}`);
-    } catch (error) {
-      notifyUser(`Error while updating (PUT) blog to the server: ${error.response.data.error}`);
-    }
-  };
-
-  // DELETE
-  const handleDeleteBlog = async (deleteBlog) => {
-    //console.log(deleteBlog);
-    try {
-      await blogService.deleteBlog(deleteBlog.id);
-      setBlogs(blogs.filter(blog => blog.id !== deleteBlog.id));
-      notifyUser(`Deleted ${deleteBlog.title}`);
-    } catch (error) {
-      notifyUser(`Error while deleting (DELETE) blog from the server: ${error.response.data.error}`);
-    }
-  };
-
   if (user === null) {
     return (
-      <>
-        <Notification message={errorMessage} />
+      <section>
+        <Notification />
         <LoginForm handleSubmit={handleLogin} />
-      </>
+      </section>
     );
   }
 
   return (
-    <>
+    <section>
       <h2>Blogs</h2>
-      <Notification message={errorMessage} />
+      <Notification />
 
       <div>
         {user.name} logged in{' '}
@@ -111,20 +74,13 @@ const App = () => {
       <br />
 
       <Togglable buttonLabel='new note' ref={newBlogFormRef}>
-        <NewBlogForm
-          handleSubmit={handleNewBlog}
-          notifyUser={notifyUser}
-        />
+        <NewBlogForm />
       </Togglable>
 
       <br />
 
-      <BlogList
-        blogs={blogs}
-        handleUpdateLike={handleUpdateLike}
-        handleDeleteBlog={handleDeleteBlog}
-      />
-    </>
+      <BlogList />
+    </section>
   );
 };
 

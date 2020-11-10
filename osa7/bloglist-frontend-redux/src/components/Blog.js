@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-const Blog = ({
-  blog = {},
-  handleUpdateLike = f => f,
-  handleDeleteBlog = f => f,
-}) => {
+import { updateBlogs, deleteBlogs } from '../reducers/blogsSlice';
+
+const blogStyle = {
+  paddingTop: '10px',
+  paddingLeft: '2px',
+  paddingBottom: '5px',
+  border: 'solid',
+  borderWidth: '1px',
+  marginBottom: '5px',
+};
+
+const removeButtonStyle = {
+  backgroundColor: 'blue',
+  color: 'white',
+  borderRadius: '10px',
+  borderColor: 'transparent',
+};
+
+const Blog = ({ blog = {} }) => {
   const [showAll, setShowAll] = useState(false);
 
-  const blogStyle = {
-    paddingTop: '10px',
-    paddingLeft: '2px',
-    paddingBottom: '5px',
-    border: 'solid',
-    borderWidth: '1px',
-    marginBottom: '5px',
-  };
-
-  const removeButtonStyle = {
-    backgroundColor: 'blue',
-    color: 'white',
-    borderRadius: '10px',
-    borderColor: 'transparent',
-  };
+  const dispatch = useDispatch();
 
   const handleLike = (blogTarget) => {
-    //console.log(blogTarget);
     const blogUpdate = {
       likes: blogTarget.likes + 1,
       title: blogTarget.title,
@@ -33,16 +33,15 @@ const Blog = ({
       user: blogTarget.user.id,
     };
 
-    handleUpdateLike(blogTarget.id, blogUpdate);
+    dispatch(updateBlogs({ id: blogTarget.id, blog: blogUpdate }));
   };
 
   const handleRemove = (blogTarget) => {
-    //console.log(blogTarget);
     const confirmDelete = window.confirm(`Remove blog ${blogTarget.title} by ${blogTarget.user.name}?`);
     if (!confirmDelete) {
       return;
     }
-    handleDeleteBlog(blogTarget);
+    dispatch(deleteBlogs(blogTarget));
   };
 
   if (showAll) {

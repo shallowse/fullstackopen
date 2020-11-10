@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-const NewBlogForm = ({
-  handleSubmit = f => f,
-  notifyUser = f => f,
-}) => {
+import { postBlogs } from '../reducers/blogsSlice';
+import { notificationAdded } from '../reducers/notificationSlice';
+
+const NewBlogForm = () => {
   const [newBlogTitle, setNewBlogTitle] = useState('');
   const [newBlogAuthor, setNewBlogAuthor] = useState('');
   const [newBlogUrl, setNewBlogUrl] = useState('');
 
+  const dispatch = useDispatch();
+
   const handleNewBlog = (event) => {
     event.preventDefault();
     if (!(newBlogTitle && newBlogAuthor && newBlogUrl)) {
-      notifyUser('some fields are missing content.');
+      dispatch(notificationAdded('some fields are missing content.'));
+      setTimeout(() => {
+        dispatch(notificationAdded(''));
+      }, 5000);
       return;
     }
 
@@ -21,8 +27,8 @@ const NewBlogForm = ({
       url: newBlogUrl,
     };
 
-    handleSubmit(newBlog);
-
+    dispatch(postBlogs(newBlog));
+    dispatch(notificationAdded(`Added ${newBlog.title}`));
     setNewBlogTitle('');
     setNewBlogAuthor('');
     setNewBlogUrl('');
