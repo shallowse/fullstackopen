@@ -40,6 +40,15 @@ export const deleteBlogs = createAsyncThunk(
   }
 );
 
+// POST - blog comment
+export const postBlogsComment = createAsyncThunk(
+  'blogs/postBlogsComment',
+  async ({ id, comment }) => {
+    const response = await blogService.postCommentBlog(id, comment);
+    return response;
+  }
+);
+
 const blogsSlice = createSlice({
   name: 'blogs',
   initialState,
@@ -63,7 +72,7 @@ const blogsSlice = createSlice({
     },
     [postBlogs.rejected]: (state, action) => {
       state.status = 'failed';
-      state.error  = action.error.message;
+      state.error = action.error.message;
     },
     [updateBlogs.fulfilled]: (state, action) => {
       state.status = 'succeeded';
@@ -80,6 +89,15 @@ const blogsSlice = createSlice({
       state.error = null;
     },
     [deleteBlogs.rejected]: (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
+    },
+    [postBlogsComment.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.blogs = state.blogs.map(blog => blog.id !== action.payload.id ? blog : action.payload);
+      state.error = null;
+    },
+    [postBlogsComment.rejected]: (state, action) => {
       state.status = 'failed';
       state.error = action.error.message;
     }

@@ -29,6 +29,9 @@ const NewBlogForm = () => {
 
     dispatch(postBlogs(newBlog));
     dispatch(notificationAdded(`Added ${newBlog.title}`));
+    setTimeout(() => {
+      dispatch(notificationAdded(''));
+    }, 5000);
     setNewBlogTitle('');
     setNewBlogAuthor('');
     setNewBlogUrl('');

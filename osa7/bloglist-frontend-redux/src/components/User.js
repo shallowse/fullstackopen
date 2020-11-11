@@ -7,7 +7,7 @@ const User = ({ match }) => {
   const user = useSelector(state => state.users.users.find(n => n.id === userId));
 
   if (!user) {
-    return null;
+    return <h1>TODO: User data has not been loaded?</h1>;
   }
 
   return (
