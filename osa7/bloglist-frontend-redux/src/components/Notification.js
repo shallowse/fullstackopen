@@ -10,7 +10,7 @@ const Notification = () => {
   }
 
   return (
-    <Toast>
+    <Toast className='error'>
       <Toast.Header closeButton={false}>
         <strong className='mr-auto'>Notification</strong>
       </Toast.Header>

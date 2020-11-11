@@ -28,10 +28,7 @@ describe('Blog app', function () {
       cy.get('#password').type('samiwrongpassword');
       cy.get('#loginButton').click();
 
-      cy.get('.error')
-        .should('contain', 'wrong username or password')
-        .and('have.css', 'color', 'rgb(255, 255, 255)')
-        .and('have.css', 'background-color', 'rgb(211, 211, 211)'); //rgb(211,211,211) === lightgray
+      cy.get('.error').should('contain', 'wrong username or password');
       cy.get('html').should('not.contain', 'Sami Smith logged in');
     });
   });
@@ -78,37 +75,11 @@ describe('Blog app', function () {
       });
 
       it('A blog can be liked', function () {
-        cy.contains('view').click();
+        cy.contains('Third blog entry').click();
         cy.get('.likeButton').click();
-
-        cy.get('.blogList > .blogEntry')
-          .then($blogs => {
-            cy.wrap($blogs[0]).should('contain', 'likes 3');
-          });
+        cy.get('.blogEntry--likes').should('contain', 'likes 3');
       });
 
-      it('Blogs are listed in descending order by likes', function () {
-        /*
-        // https://docs.cypress.io/api/commands/then.html#DOM-element
-        cy.get('.blogList')
-          .find('.viewAllButton')
-          .then((btn) => {
-            btn.click();
-          });
-        */
-
-        // https://docs.cypress.io/api/commands/each.html#Syntax
-        cy.get('.blogList')
-          .find('.viewAllButton')
-          .each($btn => $btn.click());
-
-        cy.get('.blogList > .blogEntry')
-          .then($blogs => {
-            cy.wrap($blogs[0]).should('contain', 'likes 2');
-            cy.wrap($blogs[1]).should('contain', 'likes 1');
-            cy.wrap($blogs[2]).should('contain', 'likes 0');
-          });
-      });
     });
   });
 });

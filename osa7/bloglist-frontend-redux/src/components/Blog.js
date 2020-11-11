@@ -57,7 +57,7 @@ const Blog = ({ match }) => {
     <div className='blogEntry' style={blogStyle}>
       <h2>{blog.title} {blog.author}</h2>
       <p><a href={blog.url}>{blog.url}</a></p>
-      <p>
+      <p className='blogEntry--likes'>
         likes{' '}{blog.likes}{' '}
         <Button variant='outline-secondary' className='likeButton' onClick={() => handleLike(blog)}>like</Button>
       </p>
