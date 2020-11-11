@@ -2,32 +2,45 @@
   State Model:
     a: String
 
-  A hack for now to solve Tehtävä 6.21.
+Osa7: Exercise 6.21
 
-  The timers are pushed to a queue in setNotification().
-  They are let to expire when they are due. The expiration is handled in the notifactionReducer()'s
-  'CLEAR_NOTIFICATION'.
-  Once when the timer queue has one timer left (queue.length === 1), the the notification
-  is set to an empty value. We store the notification to show in a global variable 'gText'.
+Idea: we keep track of the timerIds in a queue and check whether we should cancel the timer or not
+in case CANCEL_NOTIFICATION.
 
-  The impicit assumption here is that CLEAR_NOTIFICATION is never called before a SET_NOTIFICATION
-  so that we have something always in the timer queue.
 */
-let timerIDQueue = [];
-let gText = '';
 
-const notificationReducer = (state = 'INITIAL NOTIFICATION', action) => {
-  //console.log('notificationReducer :: ', action);
+const initialState = {
+  notificationText: 'HELLO -- NOTIFICATION AREA',
+  timerIdQueue: [],
+};
+
+const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION': {
-      return action.data.text;
+      return {
+        notificationText: action.payload.notificationText,
+        timerIdQueue: [...state.timerIdQueue, action.payload.timerId],
+      };
     }
-    case 'CLEAR_NOTIFICATION': {
-      timerIDQueue.pop();
-      if (timerIDQueue.length >= 1) {
-        return gText;
+    case 'CANCEL_NOTIFICATION': {
+      const timerIdQueue = state.timerIdQueue;
+      if (timerIdQueue.length > 1) {
+        const timerId = timerIdQueue.shift();
+        clearTimeout(timerId);
+        const retObj = {
+          notificationText: state.notificationText,
+          timerIdQueue,
+        };
+        return retObj;
       }
-      return '';
+
+      // All done, there s only one timer in the queue so now we can
+      // return to the initial state and 'close' the notification message.
+      const retObj = {
+        notificationText: '',
+        timerIdQueue: [],
+      };
+      return retObj;
     }
     default:
       return state;
@@ -36,15 +49,19 @@ const notificationReducer = (state = 'INITIAL NOTIFICATION', action) => {
 
 export const setNotification = (text = '', duration = 5000) => {
   return (dispatch) => {
+    const timerId = setTimeout(() => {
+      dispatch({
+        type: 'CANCEL_NOTIFICATION',
+      });
+    }, duration * 1000);
+
     dispatch({
       type: 'SET_NOTIFICATION',
-      data: { text },
+      payload: {
+        notificationText: text,
+        timerId,
+      }
     });
-    const timerID = setTimeout(() => {
-      dispatch({ type: 'CLEAR_NOTIFICATION' });
-    }, duration * 1000);
-    timerIDQueue.push(timerID);
-    gText = text;
   };
 };
 
