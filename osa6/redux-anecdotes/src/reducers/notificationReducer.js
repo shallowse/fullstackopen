@@ -2,6 +2,7 @@
   State Model:
     a: String
 */
+
 const notificationReducer = (state = 'INITIAL NOTIFICATION', action) => {
   //console.log('notificationReducer :: ', action);
   switch (action.type) {
@@ -13,12 +14,18 @@ const notificationReducer = (state = 'INITIAL NOTIFICATION', action) => {
   }
 };
 
-export const setNotification = (text = '') => {
+export const setNotification = (text = '', duration = 5) => {
   return (dispatch) => {
     dispatch({
       type: 'SET_NOTIFICATION',
       data: { text },
     });
+    setTimeout(() => {
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        data: { text: '' },
+      });
+    }, duration * 1000);
   };
 };
 
