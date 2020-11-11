@@ -18,7 +18,11 @@ const Navigation = () => {
   // changing-reactjs-bootstrap-navbar-link-to-routing-based-for-single-page-application-spa-67b77dc48d4b
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand><h3>Blog app</h3></Navbar.Brand>
+      <Navbar.Brand>
+        <h3>
+          <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>Blog app</Link>
+        </h3>
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto" variant='tabs'>

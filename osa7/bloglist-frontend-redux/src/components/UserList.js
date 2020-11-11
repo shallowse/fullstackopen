@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Table from 'react-bootstrap/Table';
 
 import { getUsers } from '../reducers/usersSlice';
 import { notificationAdded } from '../reducers/notificationSlice';
@@ -33,11 +34,11 @@ const UserList = () => {
       (
         <div>
           <h2>Users</h2>
-          <table>
+          <Table striped bordered hover>
             <thead>
               <tr>
-                <th></th>
-                <th><strong>blogs created</strong></th>
+                <th>Name</th>
+                <th><strong>Blogs created</strong></th>
               </tr>
             </thead>
             <tbody>
@@ -49,7 +50,7 @@ const UserList = () => {
                   </tr>)
               }
             </tbody>
-          </table>
+          </Table>
         </div>
       );
   } else if (usersStatus === 'failed') {

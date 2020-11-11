@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { Button, /*Form*/ } from 'react-bootstrap';
 
 import { updateBlogs, deleteBlogs, postBlogsComment } from '../reducers/blogsSlice';
 
@@ -11,13 +12,6 @@ const blogStyle = {
   border: 'solid',
   borderWidth: '1px',
   marginBottom: '5px',
-};
-
-const removeButtonStyle = {
-  backgroundColor: 'blue',
-  color: 'white',
-  borderRadius: '10px',
-  borderColor: 'transparent',
 };
 
 const Blog = ({ match }) => {
@@ -62,10 +56,10 @@ const Blog = ({ match }) => {
   return (
     <div className='blogEntry' style={blogStyle}>
       <h2>{blog.title} {blog.author}</h2>
-      <p><Link to={blog.url}>{blog.url}</Link></p>
+      <p><a href={blog.url}>{blog.url}</a></p>
       <p>
         likes{' '}{blog.likes}{' '}
-        <button className='likeButton' onClick={() => handleLike(blog)}>like</button>
+        <Button variant='outline-secondary' className='likeButton' onClick={() => handleLike(blog)}>like</Button>
       </p>
       <p>added by {blog.user.name}</p>
       <h4>comments</h4>
@@ -77,11 +71,11 @@ const Blog = ({ match }) => {
         value={blogComment}
         onChange={(e) => setBlogComment(e.target.value)}
       />
-      {' '}<button onClick={() => handleAddComment(blog)}>add comment</button>
+      {' '}<Button variant='outline-secondary' onClick={() => handleAddComment(blog)}>add comment</Button>
       <ul>
         {blog.comments.map(c => <li key={c.id}>{c.content}</li>)}
       </ul>
-      <button style={removeButtonStyle} onClick={() => handleRemove(blog)}>remove</button>
+      <Button onClick={() => handleRemove(blog)}>remove</Button>
     </div>
   );
 };
