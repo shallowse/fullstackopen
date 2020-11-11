@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 
 import { postBlogs } from '../reducers/blogsSlice';
 import { notificationAdded } from '../reducers/notificationSlice';
@@ -36,42 +37,106 @@ const NewBlogForm = () => {
     setNewBlogAuthor('');
     setNewBlogUrl('');
   };
+  /*
+    return (
+      <div>
+        <h2>Create new</h2>
+        <form onSubmit={handleNewBlog}>
+          <div>
+            title:{' '}
+            <input
+              id='title'
+              type='text'
+              value={newBlogTitle}
+              onChange={({ target }) => setNewBlogTitle(target.value)}
+            />
+          </div>
 
+          <div>
+            author:{' '}
+            <input
+              id='author'
+              type='text'
+              value={newBlogAuthor}
+              onChange={({ target }) => setNewBlogAuthor(target.value)}
+            />
+          </div>
+
+          <div>
+            url:{' '}
+            <input
+              id='url'
+              type='text'
+              value={newBlogUrl}
+              onChange={({ target }) => setNewBlogUrl(target.value)}
+            />
+          </div>
+          <Button
+            id='createButton'
+            type='submit'
+            style={{ margin: '5px 0' }}
+          >create</Button>
+        </form>
+      </div>
+    );
+    */
   return (
     <div>
-      <h2>create new</h2>
-      <form onSubmit={handleNewBlog}>
-        <div>
-          title:{' '}
-          <input
-            id='title'
-            type='text'
-            value={newBlogTitle}
-            onChange={({ target }) => setNewBlogTitle(target.value)}
-          />
-        </div>
+      <h2>Create new</h2>
+      <Form onSubmit={handleNewBlog}>
 
-        <div>
-          author:{' '}
-          <input
-            id='author'
-            type='text'
-            value={newBlogAuthor}
-            onChange={({ target }) => setNewBlogAuthor(target.value)}
-          />
-        </div>
+        <Form.Group as={Row} >
+          <Form.Label column sm={2}>
+            Title:
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              id='title'
+              type='text'
+              value={newBlogTitle}
+              onChange={({ target }) => setNewBlogTitle(target.value)}
+            />
+          </Col>
+        </Form.Group>
 
-        <div>
-          url:{' '}
-          <input
-            id='url'
-            type='text'
-            value={newBlogUrl}
-            onChange={({ target }) => setNewBlogUrl(target.value)}
-          />
-        </div>
-        <button id='createButton' type='submit'>create</button>
-      </form>
+        <Form.Group as={Row} >
+          <Form.Label column sm={2}>
+            Author:
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              id='author'
+              type='text'
+              value={newBlogAuthor}
+              onChange={({ target }) => setNewBlogAuthor(target.value)}
+            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} >
+          <Form.Label column sm={2}>
+            Url:
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              id='url'
+              type='text'
+              value={newBlogUrl}
+              onChange={({ target }) => setNewBlogUrl(target.value)}
+            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row}>
+          <Col sm={{ span: 10, offset: 2 }}>
+            <Button
+              id='createButton'
+              type='submit'
+              variant='outline-secondary'
+            >create</Button>
+          </Col>
+        </Form.Group>
+      </Form>
     </div>
   );
 };

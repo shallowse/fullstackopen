@@ -10,7 +10,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import { setLoginUser } from './reducers/loginUserSlice';
 
-import Navbar from './components/Navbar';
+import Navigation from './components/Navigation';
 import BlogList from './components/BlogList';
 import Blog from './components/Blog';
 import UserList from './components/UserList';
@@ -53,8 +53,7 @@ const App = () => {
   return (
     <Container>
       <Router>
-        <Navbar />
-        <h2>Blog app</h2>
+        <Navigation />
         <Notification />
         <Switch>
           <Route
