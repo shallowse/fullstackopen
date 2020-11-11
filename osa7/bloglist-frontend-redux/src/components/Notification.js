@@ -1,13 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-
-const notificationStyle = {
-  border: '2px solid blue',
-  backgroundColor: 'lightgray',
-  fontSize: '2rem',
-  color: 'white',
-  padding: '5px',
-};
+import { Toast } from 'react-bootstrap';
 
 const Notification = () => {
   const { message }  = useSelector(state => state.notification);
@@ -17,9 +10,12 @@ const Notification = () => {
   }
 
   return (
-    <div className='error' style={notificationStyle}>
-      {message}
-    </div>
+    <Toast>
+      <Toast.Header closeButton={false}>
+        <strong className='mr-auto'>Notification</strong>
+      </Toast.Header>
+      <Toast.Body>{message}</Toast.Body>
+    </Toast>
   );
 };
 

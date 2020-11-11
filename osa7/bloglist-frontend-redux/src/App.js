@@ -6,6 +6,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import { setLoginUser } from './reducers/loginUserSlice';
 
@@ -36,38 +37,46 @@ const App = () => {
 
   if (user === null) {
     return (
-      <section>
-        <Notification />
-        <LoginForm />
-      </section>
+      <Container>
+        <Row>
+          <Col xs={12}>
+            <Notification />
+          </Col>
+          <Col xs={12}>
+            <LoginForm />
+          </Col>
+        </Row>
+      </Container >
     );
   }
 
   return (
-    <Router>
-      <Navbar />
-      <h2>Blog app</h2>
-      <Notification />
-      <Switch>
-        <Route
-          exact
-          path='/'
-          render={() => (
-            <>
-              <Togglable buttonLabel='new note' ref={newBlogFormRef}>
-                <NewBlogForm />
-              </Togglable>
-              <br />
-              <BlogList />
-            </>
-          )}
-        />
-        <Route exact path='/blogs/:blogId' component={Blog} />
-        <Route exact path='/users' component={UserList} />
-        <Route exact path='/users/:userId' component={User} />
-        <Redirect to='/' />
-      </Switch>
-    </Router>
+    <Container>
+      <Router>
+        <Navbar />
+        <h2>Blog app</h2>
+        <Notification />
+        <Switch>
+          <Route
+            exact
+            path='/'
+            render={() => (
+              <>
+                <Togglable buttonLabel='new note' ref={newBlogFormRef}>
+                  <NewBlogForm />
+                </Togglable>
+                <br />
+                <BlogList />
+              </>
+            )}
+          />
+          <Route exact path='/blogs/:blogId' component={Blog} />
+          <Route exact path='/users' component={UserList} />
+          <Route exact path='/users/:userId' component={User} />
+          <Redirect to='/' />
+        </Switch>
+      </Router>
+    </Container>
   );
 };
 

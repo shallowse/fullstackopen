@@ -41,6 +41,11 @@ const loginUserSlice = createSlice({
       state.user = user;
       state.error = null;
     },
+    resetFailedLoginUser(state) {
+      state.user = null;
+      state.error = null;
+      state.status = 'idle';
+    },
   },
   extraReducers: {
     [loginUser.fulfilled]: (state, action) => {
@@ -58,6 +63,6 @@ const loginUserSlice = createSlice({
   },
 });
 
-export const { logoutUser, setLoginUser } = loginUserSlice.actions;
+export const { logoutUser, setLoginUser, resetFailedLoginUser } = loginUserSlice.actions;
 
 export default loginUserSlice.reducer;

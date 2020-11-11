@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loginUser } from '../reducers/loginUserSlice';
+import { loginUser, resetFailedLoginUser } from '../reducers/loginUserSlice';
 import { notificationAdded } from '../reducers/notificationSlice';
+
+import { Form, Col, Row, Button } from 'react-bootstrap';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -17,6 +19,7 @@ const LoginForm = () => {
     if (loginStatus === 'failed') {
       console.log(error);
       dispatch(notificationAdded('wrong username or password'));
+      dispatch(resetFailedLoginUser());
       setTimeout(() => {
         dispatch(notificationAdded(''));
       }, 5000);
@@ -34,27 +37,41 @@ const LoginForm = () => {
   return (
     <div>
       <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          username:{' '}
-          <input
-            type='text'
-            value={username}
-            id='username'
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password:{' '}
-          <input
-            type='password'
-            value={password}
-            id='password'
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button id='loginButton' type='submit'>login</button>
-      </form>
+      <Form onSubmit={handleLogin}>
+        <Form.Group as={Row} >
+          <Form.Label column sm={2}>
+            username:
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              type='text'
+              placeholder='Your username'
+              value={username}
+              id='username'
+              onChange={({ target }) => setUsername(target.value)}
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} >
+          <Form.Label column sm={2}>
+            password:
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              type='password'
+              placeholder='Your password'
+              value={password}
+              id='password'
+              onChange={({ target }) => setPassword(target.value)}
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row}>
+          <Col sm={{ span: 10, offset: 2 }}>
+            <Button id='loginButton' type='submit'>login</Button>
+          </Col>
+        </Form.Group>
+      </Form>
     </div>
   );
 };
