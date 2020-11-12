@@ -28,7 +28,7 @@ const Content = ({ parts }) => {
 const Total = ({ parts }) => {
   return (
     <p>
-      Number of excercises
+      Number of excercises{' '}
       {parts.reduce((accumulator, currentValue) => accumulator + currentValue.exercises, 0)}
     </p>
   )

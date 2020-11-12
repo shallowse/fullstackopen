@@ -10,7 +10,7 @@ const App = (props) => {
 
   const handleSelection = () => {
     const randNum = Math.floor(Math.random() * anecdotes.length);
-    //console.log(randNum);
+    console.log('randNum', randNum);
     setSelected(randNum);
   };
 
