@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Button, /*Form*/ } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { updateBlogs, deleteBlogs, postBlogsComment } from '../reducers/blogsSlice';
 
