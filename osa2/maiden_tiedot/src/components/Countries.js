@@ -16,7 +16,7 @@ const Countries = ({
           countries.map(country => {
             return (
               <p key={country.name}>
-                {country.name}&nbsp;
+                {country.name}{' '}
                 <button
                   onClick={() => handleShowCountry(country.name)}
                 >

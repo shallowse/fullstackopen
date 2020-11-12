@@ -6,7 +6,7 @@ const Weather = ({ countryLatLngArr }) => {
   //console.log(countryLatLngArr);
 
   useEffect(() => {
-    // Found this kind of weather API that does not require and API key
+    // Found this kind of weather API that does not require an API key
     // Unfortunately weather can only be fetched by latitude and longiture
     // so we will use the country coordinates for this service
     // http://www.7timer.info/doc.php?lang=en#api
