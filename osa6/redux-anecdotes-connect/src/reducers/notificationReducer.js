@@ -47,7 +47,7 @@ const notificationReducer = (state = initialState, action) => {
   }
 };
 
-export const setNotification = (text = '', duration = 5000) => {
+export const setNotification = (text = '', duration = 5) => {
   return (dispatch) => {
     const timerId = setTimeout(() => {
       dispatch({
