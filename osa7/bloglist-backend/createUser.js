@@ -1,7 +1,7 @@
 // Usage: node createUser.js <name> <username> <password>
 //
 // Note: another option for implementation would have been to use
-// axios.post for the /api/users endpoint when the backend in running.
+// axios.post for the /api/users endpoint when the backend is running.
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
