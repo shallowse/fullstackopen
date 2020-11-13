@@ -19,13 +19,18 @@ export const getUsers = createAsyncThunk(
 const usersSlice = createSlice({
   name: 'users',
   initialState,
+  reducers: {
+    updateUsers(state) {
+      state.status = 'idle';
+    }
+  },
   extraReducers: {
     [getUsers.pending]: (state) => {
       state.status = 'loading';
     },
     [getUsers.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      state.users = state.users.concat(action.payload);
+      state.users = action.payload;
       state.error = null;
     },
     [getUsers.rejected]: (state, action) => {
@@ -34,5 +39,7 @@ const usersSlice = createSlice({
     }
   }
 });
+
+export const { updateUsers } = usersSlice.actions;
 
 export default usersSlice.reducer;

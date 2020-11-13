@@ -4,6 +4,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 
 import { postBlogs } from '../reducers/blogsSlice';
 import { notificationAdded } from '../reducers/notificationSlice';
+import { updateUsers } from '../reducers/usersSlice';
 
 const NewBlogForm = () => {
   const [newBlogTitle, setNewBlogTitle] = useState('');
@@ -33,53 +34,13 @@ const NewBlogForm = () => {
     setTimeout(() => {
       dispatch(notificationAdded(''));
     }, 5000);
+
+    dispatch(updateUsers());
     setNewBlogTitle('');
     setNewBlogAuthor('');
     setNewBlogUrl('');
   };
-  /*
-    return (
-      <div>
-        <h2>Create new</h2>
-        <form onSubmit={handleNewBlog}>
-          <div>
-            title:{' '}
-            <input
-              id='title'
-              type='text'
-              value={newBlogTitle}
-              onChange={({ target }) => setNewBlogTitle(target.value)}
-            />
-          </div>
 
-          <div>
-            author:{' '}
-            <input
-              id='author'
-              type='text'
-              value={newBlogAuthor}
-              onChange={({ target }) => setNewBlogAuthor(target.value)}
-            />
-          </div>
-
-          <div>
-            url:{' '}
-            <input
-              id='url'
-              type='text'
-              value={newBlogUrl}
-              onChange={({ target }) => setNewBlogUrl(target.value)}
-            />
-          </div>
-          <Button
-            id='createButton'
-            type='submit'
-            style={{ margin: '5px 0' }}
-          >create</Button>
-        </form>
-      </div>
-    );
-    */
   return (
     <div>
       <h2>Create new</h2>
