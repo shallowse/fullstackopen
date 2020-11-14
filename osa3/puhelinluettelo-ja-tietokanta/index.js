@@ -10,7 +10,7 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-morgan.token('postputdata', (req, res) => {
+morgan.token('postputdata', (req) => {
   if (req.method === 'POST' || req.method === 'PUT') {
     return JSON.stringify(req.body);
   }
@@ -56,7 +56,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 app.delete('/api/persons/:id', (req, res, next) => {
   const id = req.params.id;
   Person.findByIdAndRemove(id)
-    .then(result => res.status(204).end())
+    .then(() => res.status(204).end())
     .catch(error => next(error));
 });
 
