@@ -10,14 +10,14 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-morgan.token('postdata', (req, res) => {
+morgan.token('postputdata', (req, res) => {
   if (req.method === 'POST' || req.method === 'PUT') {
     return JSON.stringify(req.body);
   }
   return ' ';
 });
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postdata'));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postputdata'));
 app.use(express.static('build'));
 
 // Routes

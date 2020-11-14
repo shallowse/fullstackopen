@@ -1,21 +1,37 @@
-# Link to the Heroku app
+# Link to this version's Heroku app
 
-[https://happy-fullstack-osa3.herokuapp.com](https://happy-fullstack-osa3.herokuapp.com)
+Please note that the directory ```/osa3/puhelinluettelo-ja-tietokanta``` contains the final version of this section's
+implementation.
 
-## How to deploy this subdirectory to Heroku
+[https://happy-osa3-puhelinluettelo.herokuapp.com](https://happy-osa3-puhelinluettelo.herokuapp.com)
+
+## Deploying the app to Heroku
 
 ```
-$ heroku git:remote -a happy-fullstack-osa3
+$ pwd
+<full path to working tree>/osa3/puhelinluettelo-ja-tietokanta
+$ npm run build:ui
+$ cd ../../
+$ git add . 
+$ git commit -m <commit message>
+$ cd osa3/puhelinluettelo-ja-tietokanta/
+$ npm run deploy
+```
+
+### Note: How to deploy a subdirectory to Heroku
+
+```
 $ git subtree push --prefix osa3/puhelinluettelo-backend heroku main
 ```
 
 Example command from:   
 [Deploy Git subdirectory to Heroku](https://medium.com/@shalandy/deploy-git-subdirectory-to-heroku-ea05e95fce1f)
 
-## Using yarn
+## Contents of '.env' file
+
+Remember to add the .env file to the this directory
 
 ```
-$ pwd
-<full path to working tree>/osa3/puhelinluettelo-backend
-$ yarn deploy
+MONGODB_URI=mongodb+srv://<address>  
+PORT=3001
 ```

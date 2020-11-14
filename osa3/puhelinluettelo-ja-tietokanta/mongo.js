@@ -11,7 +11,7 @@ if (insertPerson) {
 }
 
 const url =
-  `mongodb+srv://fullstackopen:${password}@cluster0.020aa.mongodb.net/puhelinluettelo?retryWrites=true&w=majority`;
+  `mongodb+srv://fullstackopen:${password}@cluster0.020aa.mongodb.net/puhelinluettelo?retryWrites=true&w=majority`
 
 mongoose.connect(url,
   {
@@ -35,7 +35,8 @@ if (insertPerson) {
   });
 
   person.save().then(response => {
-    console.log('person saved', response.toJSON());
+    //console.log(response);
+    console.log(`added ${response.name} number ${response.number} to phonebook`)
     mongoose.connection.close();
   });
 } else {
