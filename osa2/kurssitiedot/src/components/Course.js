@@ -28,7 +28,7 @@ const Total = ({ parts }) => {
   return (
     <p>
       <strong>
-        Total of&nbsp;
+        Total of{' '}
         {parts.reduce((accumulator, currentValue) => accumulator + currentValue.exercises, 0)}
         &nbsp;exercises
       </strong>
