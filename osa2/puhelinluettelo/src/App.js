@@ -7,14 +7,6 @@ import personService from './services/persons';
 
 
 const App = () => {
-  /*
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]);
-  */
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
@@ -54,7 +46,6 @@ const App = () => {
       return;
     }
 
-
     // Update an existing person
     if (persons.find(x => x.name === newName) !== undefined) {
       const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
@@ -73,9 +64,7 @@ const App = () => {
         .then(response => {
           //console.log(response);
           // Update the local copy of persons
-          const update = persons.map(person => {
-            return person.id === response.id ? { ...person, number: response.number } : person;
-          });
+          const update = persons.map(person => person.id === response.id ? response : person);
           setPersons(update);
           notifyUser(`Updated ${response.name}'s phone number`);
         })
