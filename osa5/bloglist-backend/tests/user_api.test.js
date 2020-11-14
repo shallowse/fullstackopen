@@ -7,12 +7,13 @@ const api = supertest(app);
 
 const User = require('../models/users');
 
-describe('when there are initially two users at db', () => {
+describe('When there are initially two users at db', () => {
   beforeEach(async () => {
     await User.deleteMany({});
 
     // Note: this passwordHash is not necessarily needed, just wanted to have the created test data
     // resemble the actual data that the backend creates for the database
+    //
     // https://stackoverflow.com/a/40140562
     // Promise.all
     const users = await Promise.all(helper.initialUsers.map(async user => {
@@ -44,6 +45,22 @@ describe('when there are initially two users at db', () => {
 
     const usernames = usersAtEnd.map(user => user.username);
     expect(usernames).toContain(newUser.username);
+  });
+
+  test('username must be unique in the database', async () => {
+    const nonUniqueUsername = {
+      username: helper.initialUsers[0].username,
+      name: 'Test Fullname',
+      password: 'salalainen',
+    };
+
+    const result = await api
+      .post('/api/users')
+      .send(nonUniqueUsername)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(result.body.error).toContain('User validation failed: username: Error, expected `username` to be unique.');
   });
 
   test('creation fails with missing username', async () => {
