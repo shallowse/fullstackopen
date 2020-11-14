@@ -74,7 +74,6 @@ describe('Blog app', function () {
           url: 'https://www.example.com/third-in-the-entry',
           likes: '2',
         });
-
       });
 
       it('A blog can be liked', function () {
@@ -110,5 +109,40 @@ describe('Blog app', function () {
           });
       });
     });
+
+    describe('attempt to delete blog entry succeeds', function () {
+      beforeEach(function () {
+        cy.createNewBlog({
+          title: 'First blog entry',
+          author: 'Lisa Winfrey',
+          url: 'https://www.cnn.com/a-ready-made-blog-entry',
+          likes: '0',
+        });
+
+        cy.createNewBlog({
+          title: 'Second blog entry',
+          author: 'Lisa Winfrey',
+          url: 'https://www.cnn.com/a-ready-made-blog-entry',
+          likes: '1',
+        });
+
+        cy.createNewBlog({
+          title: 'Third blog entry',
+          author: 'Michael Attenborough',
+          url: 'https://www.example.com/third-in-the-entry',
+          likes: '2',
+        });
+      });
+
+      it('a blog entry can be deleted', function () {
+        cy.get('.blogList > .blogEntry').should('have.length', 3);
+
+        cy.contains('view').click();
+        cy.contains('remove').click();
+
+        cy.get('.blogList > .blogEntry').should('have.length', 2);
+      });
+    });
+
   });
 });
