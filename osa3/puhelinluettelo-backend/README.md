@@ -3,7 +3,7 @@
 Please note that the directory ```/osa3/puhelinluettelo-ja-tietokanta``` contains the final version of this section's
 implementation.
 
-[https://happy-osa3-puhelinluettelo.herokuapp.com/api/persons](https://happy-osa3-puhelinluettelo.herokuapp.com/api/persons)
+[https://happy-osa3-puhelinluettelo.herokuapp.com](https://happy-osa3-puhelinluettelo.herokuapp.com)
 
 ## Deploying the app to Heroku
 
@@ -11,6 +11,10 @@ implementation.
 $ pwd
 <full path to working tree>/osa3/puhelinluettelo-backend
 $ npm run build:ui
+$ cd ../../
+$ git add . 
+$ git commit -m <commit message>
+$ cd osa3/puhelinluettelo-backend/
 $ npm run deploy
 ```
 
