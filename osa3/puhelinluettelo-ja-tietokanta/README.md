@@ -14,6 +14,7 @@ $ npm run build:ui
 $ cd ../../
 $ git add . 
 $ git commit -m <commit message>
+$ git push origin main
 $ cd osa3/puhelinluettelo-ja-tietokanta/
 $ npm run deploy
 ```
