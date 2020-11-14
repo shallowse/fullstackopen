@@ -11,6 +11,7 @@ The app is running in Heroku:
 ```
 $ pwd
 <full path to working tree>/osa3/puhelinluettelo-backend
+
 $ npm run build:ui
 
 $ cd ../../
