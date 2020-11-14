@@ -13,7 +13,7 @@ const App = () => {
   const [filterByName, setFilterByName] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Helper function to reduce copypaste for notifying the user
+  // Helper function to reduce copypaste for notifying the user about changes
   const notifyUser = (message) => {
     setErrorMessage(message);
     setTimeout(() => {
@@ -64,9 +64,7 @@ const App = () => {
         .then(response => {
           //console.log(response);
           // Update the local copy of persons
-          const update = persons.map(person => {
-            return person.id === response.id ? { ...person, number: response.number } : person;
-          });
+          const update = persons.map(person => person.id === response.id ? response : person);
           setPersons(update);
           notifyUser(`Updated ${response.name}'s phone number`);
         })
