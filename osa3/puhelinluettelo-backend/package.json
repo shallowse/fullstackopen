@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build:ui": "rm -fr build && cd ../puhelinluettelo-frontend && yarn run build && cp -r build ../puhelinluettelo-backend",
-    "deploy": "cd ../../ && git subtree push --prefix osa3/puhelinluettelo-backend heroku main",
+    "deploy": "echo \"Check README.md for instructions.\" && exit 0",
     "logs:prod": "heroku logs --tail",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
