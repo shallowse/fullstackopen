@@ -24,3 +24,7 @@ $ node createUser.js 'Tiina Testaaja' tiina salasana
 
 Note: user creation and blog content creation is done automatically in the tests to test database. The
 tests are in folder '/tests'.
+
+## To run cypress tests
+
+1. Remember to start the ```bloglist-backend``` server with command ```$ npm run start:test```
