@@ -17,10 +17,9 @@ $ npm run build:ui
 $ cd ../../
 
 $ git add . 
-
 $ git commit -m <commit message>
-
 $ git push origin main
+>> Comment: in case there have been changes to the front-end implementation
 
 $ git remote add heroku https://git.heroku.com/happy-osa3-puhelinluettelo.git
 >> Comment: in case the Heroku repo has not been setup
