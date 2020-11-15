@@ -19,6 +19,10 @@ const useCountry = (name) => {
   const [country, setCountry] = useState(null);
 
   useEffect(() => {
+    if (name === '') {
+      return;
+    }
+
     const url = `https://restcountries.eu/rest/v2/name/${name}?fullText=true`;
     axios.get(url)
       .then(response => response.data[0])
