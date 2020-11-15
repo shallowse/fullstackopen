@@ -1,8 +1,11 @@
 /*
   State Model:
-    a: String
+  {
+    notificationText: String,
+    timerIdQueue: Array
+  }
 
-Osa7: Exercise 6.21
+osa6: Exercise 6.21 --> ported here too
 
 Idea: we keep track of the timerIds in a queue and check whether we should cancel the timer or not
 in case CANCEL_NOTIFICATION.
