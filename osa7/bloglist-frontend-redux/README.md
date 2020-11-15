@@ -9,3 +9,6 @@ found from [Redux example GitHub repository](https://github.com/reduxjs/redux-es
 ## To run cypress tests
 
 1. Remember to start the ```bloglist-backend``` server with command ```$ npm run start:test```
+     - Remeber also to add the ```.env``` file to the ```bloglist-backend``` directory
+2. Start the front-end app with command ```$ npm start```
+3. Run the cypress tests with command ```$ npm run cypress:open```
