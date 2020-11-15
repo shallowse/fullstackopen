@@ -13,7 +13,7 @@ TEST_MONGODB_URI=mongodb+srv://<address of test database>
 
 ## How to create some users to the database
 
-Create some users to the database by running the createUsers.js command
+Create some users to the database by running the createUser.js command
 
 ```
 Usage: node createUser.js <name> <username> <password>
