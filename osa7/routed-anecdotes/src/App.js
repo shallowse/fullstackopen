@@ -68,7 +68,6 @@ const CreateNew = (props) => {
   const { reset: authorReset, ...author } = useField('text');
   const { reset: infoReset, ...info } = useField('text');
 
-
   const history = useHistory();
 
   const handleSubmit = (e) => {
@@ -157,6 +156,9 @@ const App = () => {
   };
 
   /*
+
+  const anecdoteById = (id) => anecdotes.find(a => a.id === id);
+
   const vote = (id) => {
     const anecdote = anecdoteById(id);
 
@@ -189,16 +191,16 @@ const App = () => {
       }
 
       <Switch>
-        <Route path='/anecdotes/:id'>
+        <Route exact path='/anecdotes/:id'>
           <Anecdote anecdote={anecdote} />
         </Route>
-        <Route path='/anecdotes'>
+        <Route exact path='/anecdotes'>
           <AnecdoteList anecdotes={anecdotes} />
         </Route>
-        <Route path='/create'>
+        <Route exact path='/create'>
           <CreateNew addNew={addNew} />
         </Route>
-        <Route path='/about'>
+        <Route exact path='/about'>
           <About />
         </Route>
       </Switch>
