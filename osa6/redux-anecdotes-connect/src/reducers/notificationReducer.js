@@ -37,7 +37,7 @@ const notificationReducer = (state = initialState, action) => {
         return retObj;
       }
 
-      // All done, there s only one timer in the queue so now we can
+      // All done, there's only one timer in the queue so now we can
       // return to the initial state and 'close' the notification message.
       const retObj = {
         notificationText: '',
