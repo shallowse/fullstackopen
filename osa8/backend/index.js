@@ -204,7 +204,7 @@ const resolvers = {
       return newBook;
     },
     editAuthor: (parent, args) => {
-      // 1. fint author, if not found, return null
+      // 1. find author, if not found, return null
       // 2. uddate author born field
       const authorFound = authors.find(author => author.name === args.name);
       if (!authorFound) {
