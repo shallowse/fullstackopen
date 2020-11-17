@@ -1,11 +1,24 @@
 
 import React from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_AUTHORS } from '../queries/queries';
 
 const Authors = (props) => {
   if (!props.show) {
     return null;
   }
-  const authors = [];
+
+  const { loading, error, data } = useQuery(GET_ALL_AUTHORS);
+
+  if (loading) {
+    return <p>Loading ...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  const authors = data.allAuthors;
 
   return (
     <div>

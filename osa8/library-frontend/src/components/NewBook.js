@@ -1,24 +1,39 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { CREATE_BOOK, GET_ALL_AUTHORS, GET_ALL_BOOKS } from '../queries/queries';
 
 const NewBook = (props) => {
+  if (!props.show) {
+    return null;
+  }
+
   const [title, setTitle] = useState('');
-  const [author, setAuhtor] = useState('');
+  const [author, setAuthor] = useState('');
   const [published, setPublished] = useState('');
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
 
-  if (!props.show) {
-    return null;
-  }
+  const [createPerson] = useMutation(CREATE_BOOK, {
+    refetchQueries: [{ query: GET_ALL_BOOKS }, { query: GET_ALL_AUTHORS }],
+    onError: (error) => {
+      props.setError(error.graphQLErrors[0].message);
+    },
+  });
+
+  // https://redux.js.org/tutorials/essentials/part-4-using-data#adding-authors-for-posts
+  const canSave = Boolean(title) && Boolean(author) && Boolean(published) && (genres.length > 0);
 
   const submit = async (event) => {
     event.preventDefault();
 
     console.log('add book...');
 
+
+    createPerson({ variables: { title, author, published: parseInt(published), genres } });
+
     setTitle('');
     setPublished('');
-    setAuhtor('');
+    setAuthor('');
     setGenres([]);
     setGenre('');
   };
@@ -42,7 +57,7 @@ const NewBook = (props) => {
           author
           <input
             value={author}
-            onChange={({ target }) => setAuhtor(target.value)}
+            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
@@ -63,7 +78,7 @@ const NewBook = (props) => {
         <div>
           genres: {genres.join(' ')}
         </div>
-        <button type='submit'>create book</button>
+        <button type='submit' disabled={!canSave}>create book</button>
       </form>
     </div>
   );
