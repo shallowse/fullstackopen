@@ -4,6 +4,7 @@ export const GET_ALL_AUTHORS = gql`
   query {
     allAuthors {
       name
+      id
       born
       bookCount
     }
@@ -35,6 +36,21 @@ export const CREATE_BOOK = gql`
     ) {
       title
       author
+    }
+  }
+`;
+
+export const UPDATE_AUTHOR_BORN = gql`
+  mutation updateAuthorBorn(
+    $name: String!
+    $setBornTo: Int!
+  ) {
+    editAuthor(
+      name: $name
+      setBornTo: $setBornTo
+    ) {
+      name
+      born
     }
   }
 `;
