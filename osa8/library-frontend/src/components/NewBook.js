@@ -21,12 +21,12 @@ const NewBook = (props) => {
     setAuhtor('');
     setGenres([]);
     setGenre('');
-  }
+  };
 
   const addGenre = () => {
     setGenres(genres.concat(genre));
     setGenre('');
-  }
+  };
 
   return (
     <div>
