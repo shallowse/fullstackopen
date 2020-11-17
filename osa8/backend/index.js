@@ -1,5 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server');
-//const uuid = require('uuid/v1');
+
+// https://stackoverflow.com/a/62555064
+const { v1: uuidv1 } = require('uuid');
 
 let authors = [
   {
@@ -107,6 +109,20 @@ const typeDefs = gql`
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String!]!
+    ): Book
+
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
+  }
 `;
 
 const resolvers = {
@@ -114,6 +130,7 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: (parent, args) => {
+      // https://stackoverflow.com/a/32108184
       if (Object.keys(args).length === 0) {
         return books;
       }
@@ -133,7 +150,7 @@ const resolvers = {
       if (args.author && args.genre) {
         retArray = filterByAuthor(args.author);
         retArray = filterByGenre(args.genre, retArray);
-      } else if (args.author && ! args.genre) {
+      } else if (args.author && !args.genre) {
         retArray = filterByAuthor(args.author);
       } else if (!args.author && args.genre) {
         retArray = filterByGenre(args.genre);
@@ -159,6 +176,42 @@ const resolvers = {
       });
 
       return retArray;
+    },
+  },
+  Mutation: {
+    addBook: (parent, args) => {
+      // 1. find author, if author not in authors, add new author to authors
+      // 2. add book to books
+      const authorFound = authors.find(author => author.name === args.author);
+      if (!authorFound) {
+        const newAuthor = {
+          name: args.author,
+          id: uuidv1(),
+          born: null,
+        };
+        authors = [...authors, newAuthor];
+      }
+
+      const newBook = {
+        title: args.title,
+        published: args.published,
+        author: args.author,
+        id: uuidv1(),
+        genres: args.genres,
+      };
+
+      books = [...books, newBook];
+      return newBook;
+    },
+    editAuthor: (parent, args) => {
+      // 1. fint author, if not found, return null
+      // 2. uddate author born field
+      const authorFound = authors.find(author => author.name === args.name);
+      if (!authorFound) {
+        return null;
+      }
+      authorFound.born = args.setBornTo;
+      return authorFound;
     },
   }
 };
