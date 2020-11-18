@@ -1,4 +1,4 @@
-// Usage: node createBooksAuthorsUsers.js
+// Usage: node createAuthorsBooksUsers.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Book = require('./models/book');
@@ -106,20 +106,21 @@ async function createAuthorsBooksUsers() {
     console.log('DELETE DATA ...\n');
     await Author.deleteMany({});
     await Book.deleteMany({});
+    await User.deleteMany({});
 
     const retAuthors = await Author.insertMany(authors);
     console.log('\nAUTHORS ...\n', retAuthors);
 
-    const retBooks = await Promise.all(books.map(async book => {
+    let retBooks = await Promise.all(books.map(async book => {
       const { _id } = await Author.findOne({ name: book.author });
       book.author = _id;
       return book;
     }));
+    retBooks = await Book.insertMany(retBooks);
     console.log('\nBOOKS ...\n', retBooks);
-    await Book.insertMany(retBooks);
 
-    console.log('\nUSERS...\n');
-    await User.insertMany(users);
+    const retUsers = await User.insertMany(users);
+    console.log('\nUSERS...\n', retUsers);
 
     mongoose.connection.close();
   } catch (error) {
@@ -129,4 +130,4 @@ async function createAuthorsBooksUsers() {
 }
 
 connectToMongo();
-createAuthorsBooks();
+createAuthorsBooksUsers();
