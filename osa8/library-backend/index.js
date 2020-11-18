@@ -1,4 +1,4 @@
-const { ApolloServer, /*UserInputError,*/ gql,/*, AuthenticationError */ } = require('apollo-server');
+const { ApolloServer, UserInputError, gql,/*, AuthenticationError */ } = require('apollo-server');
 require('dotenv').config();
 
 const mongoose = require('mongoose');
@@ -83,6 +83,7 @@ const resolvers = {
       }
 
       let retArray = [];
+
       if (args.author && args.genre) {
         const S = await Author.findOne({ name: args.author });
         if (S !== null) {
@@ -103,7 +104,6 @@ const resolvers = {
 
       } else { // Something weird must have happened?
         retArray = [];
-
       }
 
       retArray = await generatebookCount(retArray);
@@ -129,44 +129,64 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: (parent, args) => {
-      // 1. find author, if author not in authors, add new author to authors
+    addBook: async (parent, args) => {
+      // 1. find author, if author not in authors (in database), create new author to authors
       // 2. add book to books
-      /*
-      const authorFound = authors.find(author => author.name === args.author);
-      if (!authorFound) {
-        const newAuthor = {
-          name: args.author,
-          born: null,
-        };
-        authors = [...authors, newAuthor];
+      let author = await Author.findOne({ name: args.author });
+      if (author === null) {
+        try {
+          author = new Author({ name: args.author });
+          author = await author.save();
+        } catch (error) {
+          //console.log(error);
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          });
+        }
       }
 
-      const newBook = {
-        title: args.title,
-        published: args.published,
-        author: args.author,
-        id: uuidv1(),
-        genres: args.genres,
-      };
+      let book = new Book({ ...args, author: author.id });
+      try {
+        book = await book.save();
+        book = await Book.findOne({ _id: book._id }).populate('author');
+      } catch (error) {
+        //console.log(error);
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        });
+      }
 
-      books = [...books, newBook];
-      return newBook;
-      */
-      return null;
+      // generate bookCount field for the author
+      const bookCount = await Book.find({ author: author._id });
+      book.author.bookCount = bookCount.length;
+
+      return book;
     },
-    editAuthor: (parent, args) => {
-      return null;
+    editAuthor: async (parent, args) => {
       // 1. find author, if not found, return null
       // 2. update author born field
-      /*
-      const authorFound = authors.find(author => author.name === args.name);
+      // 3. generate bookCount field for the author
+      const authorFound = await Author.findOne({ name: args.name });
       if (!authorFound) {
         return null;
       }
-      authorFound.born = args.setBornTo;
-      return authorFound;
-      */
+      authorFound.born = args.born;
+
+      let author;
+      try {
+        author = await Author.findOneAndUpdate({ _id: authorFound._id }, { born: args.setBornTo });
+      } catch (error) {
+        //console.log(error);
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        });
+      }
+
+      // generate bookCount field for the author
+      const bookCount = await Book.find({ author: author._id });
+      author.bookCount = bookCount.length;
+
+      return author;
     },
   }
 };
