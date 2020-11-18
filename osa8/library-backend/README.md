@@ -9,11 +9,11 @@ MONGODB_URI=mongodb+srv://<address>
 SECRET=<secret phrase>  
 ```
 
-## How to create some books and authors to the database
+## How to create some books, authors and users to the database
 
-Create some initial data (books, authors) to the database by running the 
-createBooksAuthors.js command
+Create some initial data (books, authors, users) to the database by running the 
+createBooksAuthorsUsers.js command
 
 ```
-Usage: node createBooksAuthors.js
+Usage: node createBooksAuthorsUsers.js
 ```
