@@ -1,104 +1,36 @@
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer, /*UserInputError,*/ gql,/*, AuthenticationError */ } = require('apollo-server');
+require('dotenv').config();
 
-// https://stackoverflow.com/a/62555064
-const { v1: uuidv1 } = require('uuid');
+const mongoose = require('mongoose');
+const Book = require('./models/book');
+const Author = require('./models/author');
 
-let authors = [
-  {
-    name: 'Robert Martin',
-    id: 'afa51ab0-344d-11e9-a414-719c6709cf3e',
-    born: 1952,
-  },
-  {
-    name: 'Martin Fowler',
-    id: 'afa5b6f0-344d-11e9-a414-719c6709cf3e',
-    born: 1963
-  },
-  {
-    name: 'Fyodor Dostoevsky',
-    id: 'afa5b6f1-344d-11e9-a414-719c6709cf3e',
-    born: 1821
-  },
-  {
-    name: 'Joshua Kerievsky', // birthyear not known
-    id: 'afa5b6f2-344d-11e9-a414-719c6709cf3e',
-  },
-  {
-    name: 'Sandi Metz', // birthyear not known
-    id: 'afa5b6f3-344d-11e9-a414-719c6709cf3e',
-  },
-];
+const MONGODB_URI = process.env.MONGODB_URI;
+//const JWT_SECRET = process.env.SECRET;
 
-/*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
-*/
-
-let books = [
+mongoose.connect(MONGODB_URI,
   {
-    title: 'Clean Code',
-    published: 2008,
-    author: 'Robert Martin',
-    id: 'afa5b6f4-344d-11e9-a414-719c6709cf3e',
-    genres: ['refactoring']
-  },
-  {
-    title: 'Agile software development',
-    published: 2002,
-    author: 'Robert Martin',
-    id: 'afa5b6f5-344d-11e9-a414-719c6709cf3e',
-    genres: ['agile', 'patterns', 'design']
-  },
-  {
-    title: 'Refactoring, edition 2',
-    published: 2018,
-    author: 'Martin Fowler',
-    id: 'afa5de00-344d-11e9-a414-719c6709cf3e',
-    genres: ['refactoring']
-  },
-  {
-    title: 'Refactoring to patterns',
-    published: 2008,
-    author: 'Joshua Kerievsky',
-    id: 'afa5de01-344d-11e9-a414-719c6709cf3e',
-    genres: ['refactoring', 'patterns']
-  },
-  {
-    title: 'Practical Object-Oriented Design, An Agile Primer Using Ruby',
-    published: 2012,
-    author: 'Sandi Metz',
-    id: 'afa5de02-344d-11e9-a414-719c6709cf3e',
-    genres: ['refactoring', 'design']
-  },
-  {
-    title: 'Crime and punishment',
-    published: 1866,
-    author: 'Fyodor Dostoevsky',
-    id: 'afa5de03-344d-11e9-a414-719c6709cf3e',
-    genres: ['classic', 'crime']
-  },
-  {
-    title: 'The Demon ',
-    published: 1872,
-    author: 'Fyodor Dostoevsky',
-    id: 'afa5de04-344d-11e9-a414-719c6709cf3e',
-    genres: ['classic', 'revolution']
-  },
-];
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+  })
+  .then(() => console.log('connected to MongoDB'))
+  .catch(error => console.error('error connecting to MongoDB:', error.message));
 
 // http://spec.graphql.org/draft/
 const typeDefs = gql`
   type Book {
+    id: ID!
     title: String!
     published: Int!
-    author: String!
-    id: ID!
+    author: Author!
     genres: [String!]!
   }
 
   type Author {
-    name: String!
     id: ID!
+    name: String!
     born: Int
     bookCount: Int!
   }
@@ -127,53 +59,71 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (parent, args) => {
-      // https://stackoverflow.com/a/32108184
-      if (Object.keys(args).length === 0) {
-        return books;
+    bookCount: () => Book.countDocuments(),
+    authorCount: () => Author.countDocuments(),
+    allBooks: async (parent, args) => {
+
+      // helper function to generate the author bookCount field
+      async function generatebookCount(arr = []) {
+        const bookCountArray = await Promise.all(arr.map(async S => {
+          const bookCount = await Book.find({ author: S.author });
+          const elem = await Book.findOne({ _id: S._id }).populate('author');
+          elem.author.bookCount = bookCount.length;
+          return elem;
+        })
+        );
+        return bookCountArray;
       }
 
-      // Define two helper functions
-      const filterByAuthor = (author) => books.filter(book => book.author === author);
-
-      const filterByGenre = (S, arr = []) => {
-        let tmpArray = arr.length !== 0 ? arr : books;
-        return tmpArray.filter(book => {
-          let tmp = book.genres.filter(genre => genre === S);
-          return tmp.length !== 0 ? book : null;
-        });
-      };
+      // https://stackoverflow.com/a/32108184
+      if (Object.keys(args).length === 0) {
+        let retArray = await Book.find({});
+        retArray = await generatebookCount(retArray);
+        return retArray;
+      }
 
       let retArray = [];
       if (args.author && args.genre) {
-        retArray = filterByAuthor(args.author);
-        retArray = filterByGenre(args.genre, retArray);
+        const S = await Author.findOne({ name: args.author });
+        if (S !== null) {
+          retArray = await Book.find(
+            {
+              author: S._id,
+              genres: { $in: [args.genre] }
+            }
+          );
+        }
+
       } else if (args.author && !args.genre) {
-        retArray = filterByAuthor(args.author);
+        const S = await Author.findOne({ name: args.author });
+        retArray = await Book.find({ author: S._id });
+
       } else if (!args.author && args.genre) {
-        retArray = filterByGenre(args.genre);
+        retArray = await Book.find({ genres: { $in: [args.genre] } });
+
+      } else { // Something weird must have happened?
+        retArray = [];
+
       }
 
+      retArray = await generatebookCount(retArray);
       //console.log(retArray);
       return retArray;
     },
-    allAuthors: () => {
-      // 1. traverse all authors
-      // 2. travers all books per author, collect count to return object
+    allAuthors: async () => {
+      // 1. find the authors
+      // 2. traverse the authors' list and generate the bookCount
+      const authors = await Author.find({});
 
-      const retArray = authors.slice();
-      retArray.forEach(author => {
-        const bookCount = books.reduce((accumulator, currentValue) => {
-          if (currentValue.author === author.name) {
-            return accumulator + 1;
-          } else {
-            return accumulator;
-          }
-        }, 0);
-        author.bookCount = bookCount;
-      });
+      const retArray = await Promise.all(authors.map(async S => {
+        const books = await Book.find({ author: S._id });
+        return {
+          id: S._id,
+          name: S.name,
+          born: S.born || null,
+          bookCount: books.length,
+        };
+      }));
 
       return retArray;
     },
@@ -182,11 +132,11 @@ const resolvers = {
     addBook: (parent, args) => {
       // 1. find author, if author not in authors, add new author to authors
       // 2. add book to books
+      /*
       const authorFound = authors.find(author => author.name === args.author);
       if (!authorFound) {
         const newAuthor = {
           name: args.author,
-          id: uuidv1(),
           born: null,
         };
         authors = [...authors, newAuthor];
@@ -202,16 +152,21 @@ const resolvers = {
 
       books = [...books, newBook];
       return newBook;
+      */
+      return null;
     },
     editAuthor: (parent, args) => {
+      return null;
       // 1. find author, if not found, return null
       // 2. update author born field
+      /*
       const authorFound = authors.find(author => author.name === args.name);
       if (!authorFound) {
         return null;
       }
       authorFound.born = args.setBornTo;
       return authorFound;
+      */
     },
   }
 };
@@ -219,9 +174,6 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  cacheControl: { // https://www.apollographql.com/docs/apollo-server/performance/caching/
-    defaultMaxAge: 0,
-  }
 });
 
 server.listen().then(({ url }) => {
