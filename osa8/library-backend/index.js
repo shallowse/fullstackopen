@@ -62,27 +62,12 @@ const resolvers = {
     bookCount: () => Book.countDocuments(),
     authorCount: () => Author.countDocuments(),
     allBooks: async (parent, args) => {
-
-      // helper function to generate the author bookCount field
-      async function generatebookCount(arr = []) {
-        const bookCountArray = await Promise.all(arr.map(async S => {
-          const bookCount = await Book.find({ author: S.author });
-          const elem = await Book.findOne({ _id: S._id }).populate('author');
-          elem.author.bookCount = bookCount.length;
-          return elem;
-        })
-        );
-        return bookCountArray;
-      }
-
+      let retArray = [];
       // https://stackoverflow.com/a/32108184
       if (Object.keys(args).length === 0) {
-        let retArray = await Book.find({});
-        retArray = await generatebookCount(retArray);
+        retArray = await Book.find({}).populate('author');
         return retArray;
       }
-
-      let retArray = [];
 
       if (args.author && args.genre) {
         const S = await Author.findOne({ name: args.author });
@@ -92,21 +77,20 @@ const resolvers = {
               author: S._id,
               genres: { $in: [args.genre] }
             }
-          );
+          ).populate('author');
         }
 
       } else if (args.author && !args.genre) {
         const S = await Author.findOne({ name: args.author });
-        retArray = await Book.find({ author: S._id });
+        retArray = await Book.find({ author: S._id }).populate('author');
 
       } else if (!args.author && args.genre) {
-        retArray = await Book.find({ genres: { $in: [args.genre] } });
+        retArray = await Book.find({ genres: { $in: [args.genre] } }).populate('author');
 
       } else { // Something weird must have happened?
         retArray = [];
       }
 
-      retArray = await generatebookCount(retArray);
       //console.log(retArray);
       return retArray;
     },
@@ -126,6 +110,20 @@ const resolvers = {
       }));
 
       return retArray;
+    },
+  },
+  Author: {
+    bookCount: async (parent) => {
+      // Generate bookCount field for the author
+      // 1. find the Object id of the author
+      // 2. find the books of the author using the obtained id
+      //console.log(parent);
+      const author = await Author.findOne({ name: parent.name });
+      if (!author) {
+        return null;
+      }
+      const bookCount = await Book.find({ author: author._id });
+      return bookCount.length;
     },
   },
   Mutation: {
