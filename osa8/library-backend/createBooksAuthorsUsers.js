@@ -101,26 +101,25 @@ async function connectToMongo() {
   }
 }
 
-async function createBooksAuthorsUsers() {
+async function createAuthorsBooksUsers() {
   try {
     console.log('DELETE DATA ...\n');
     await Author.deleteMany({});
     await Book.deleteMany({});
-    await User.deleteMany({});
 
     const retAuthors = await Author.insertMany(authors);
     console.log('\nAUTHORS ...\n', retAuthors);
 
-    let retBooks = await Promise.all(books.map(async book => {
+    const retBooks = await Promise.all(books.map(async book => {
       const { _id } = await Author.findOne({ name: book.author });
       book.author = _id;
       return book;
     }));
-    retBooks = await Book.insertMany(retBooks);
     console.log('\nBOOKS ...\n', retBooks);
+    await Book.insertMany(retBooks);
 
-    const retUsers = await User.insertMany(users);
-    console.log('\nUSERS ...\n', retUsers);
+    console.log('\nUSERS...\n');
+    await User.insertMany(users);
 
     mongoose.connection.close();
   } catch (error) {
@@ -130,4 +129,4 @@ async function createBooksAuthorsUsers() {
 }
 
 connectToMongo();
-createBooksAuthorsUsers();
+createAuthorsBooks();
