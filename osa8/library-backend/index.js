@@ -52,6 +52,7 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [String!]
     me: User
   }
 
@@ -131,6 +132,18 @@ const resolvers = {
           bookCount: books.length,
         };
       }));
+
+      return retArray;
+    },
+    allGenres: async () => {
+      // 1. fetch all the genres from books to a list
+      // 2. remove duplicates from the list and return it
+      const bookGenres = await Book.find({}).select({ 'genres': 1 });
+      const genreArray = bookGenres.map(S => S.genres).flat();
+
+      // https://codeburst.io/javascript-array-distinct-5edc93501dc4
+      const retArray = [...new Set(genreArray)];
+      //console.log(retArray);
 
       return retArray;
     },

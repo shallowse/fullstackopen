@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { CREATE_BOOK, GET_ALL_AUTHORS, GET_ALL_BOOKS } from '../queries/queries';
+import {
+  CREATE_BOOK,
+  GET_ALL_AUTHORS,
+  GET_ALL_BOOKS,
+  GET_ALL_GENRES_BOOKS,
+} from '../queries/queries';
 
 const NewBook = (props) => {
   if (!props.show) {
@@ -14,10 +19,14 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([]);
 
   const [createPerson] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: GET_ALL_BOOKS }, { query: GET_ALL_AUTHORS }],
+    refetchQueries: [{ query: GET_ALL_BOOKS }, { query: GET_ALL_AUTHORS }, { query: GET_ALL_GENRES_BOOKS }],
     onError: (error) => {
-      props.setError(error);
+      console.log(error);
+      props.setError(String(error));
     },
+    onCompleted: () => {
+      props.setPage('books');
+    }
   });
 
   // https://redux.js.org/tutorials/essentials/part-4-using-data#adding-authors-for-posts
@@ -27,7 +36,6 @@ const NewBook = (props) => {
     event.preventDefault();
 
     console.log('add book...');
-
 
     createPerson({ variables: { title, author, published: parseInt(published), genres } });
 

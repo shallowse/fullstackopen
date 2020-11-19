@@ -73,28 +73,29 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <div>
-        <h2>Set birthyear</h2>
-        <form onSubmit={submitBorn}>
-          <div>
-            name{' '}
-            <select value={authorName} onChange={(e) => setAuthorName(e.target.value)}>
-              <option value=''></option>
-              {authorsOptions}
-            </select>
-          </div>
-          <div>
-            born{' '}
-            <input
-              type='number'
-              value={born}
-              onChange={(e) => setBorn(parseInt(e.target.value))}
-            />
-          </div>
-          <button type='submit' disabled={!canSave}>update author</button>
-        </form>
-      </div>
-
+      {props.token &&
+        <div>
+          <h2>Set birthyear</h2>
+          <form onSubmit={submitBorn}>
+            <div>
+              name{' '}
+              <select value={authorName} onChange={(e) => setAuthorName(e.target.value)}>
+                <option value=''></option>
+                {authorsOptions}
+              </select>
+            </div>
+            <div>
+              born{' '}
+              <input
+                type='number'
+                value={born}
+                onChange={(e) => setBorn(parseInt(e.target.value))}
+              />
+            </div>
+            <button type='submit' disabled={!canSave}>update author</button>
+          </form>
+        </div>
+      }
     </div>
   );
 };
