@@ -36,6 +36,7 @@ export const GET_GENRE_BOOKS = gql`
         bookCount
       }
       published
+      genres
     }
   }
 `;

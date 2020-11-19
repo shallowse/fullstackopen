@@ -19,7 +19,11 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([]);
 
   const [createPerson] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: GET_ALL_BOOKS }, { query: GET_ALL_AUTHORS }, { query: GET_ALL_GENRES_BOOKS }],
+    refetchQueries: [
+      { query: GET_ALL_BOOKS },
+      { query: GET_ALL_AUTHORS },
+      { query: GET_ALL_GENRES_BOOKS },
+    ],
     onError: (error) => {
       console.log(error);
       props.setError(String(error));
