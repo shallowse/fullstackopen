@@ -25,7 +25,9 @@ const Books = (props) => {
 
   const showGenre = (genre) => {
     setState(genre);
-    loadSelectedGenre(genre);
+    if (genre !== 'all genres') {
+      loadSelectedGenre(genre);
+    }
   };
 
   if (resultAllBooks.loading || resultAllGenres.loading || selected_genre_loading) {
