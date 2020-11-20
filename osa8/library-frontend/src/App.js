@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useSubscription } from '@apollo/client';
 import Authors from './components/Authors';
 import Books from './components/Books';
 import NewBook from './components/NewBook';
 import Notify from './components/Notify';
 import LoginForm from './components/LoginForm';
 import RecommendedBook from './components/RecommendedBook';
+
+import { BOOK_ADDED, GET_ALL_BOOKS, GET_ALL_AUTHORS } from './queries/queries';
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -19,6 +21,54 @@ const App = () => {
       setToken(localToken);
     }
   }, []);
+
+  // https://www.apollographql.com/docs/react/data/subscriptions/#options
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const bookAdded = subscriptionData.data.bookAdded;
+      //console.log(bookAdded);
+      updateCacheWith(bookAdded);
+      window.alert(`New book added: ${bookAdded.title} by ${bookAdded.author.name}`);
+    },
+  });
+
+  // TODO: Maybe refactor the duplicate code used for updating the cache entries
+  //       for books and authors.
+  const updateCacheWith = (bookAdded) => {
+    // console.log(bookAdded);
+    // UPDATE books listing
+    let dataInStore;
+    try {
+      dataInStore = client.readQuery({ query: GET_ALL_BOOKS });
+      //console.log('update books listing cache\n', dataInStore);
+
+      if (!dataInStore.allBooks.map(p => p.title).includes(bookAdded.title)) {
+        client.writeQuery({
+          query: GET_ALL_BOOKS,
+          data: { allBooks: dataInStore.allBooks.concat(bookAdded) },
+        });
+      }
+    } catch (error) {
+      // Maybe the user has not yet loaded all the books by pressing the 'books' button?
+      console.log(error);
+    }
+
+    // UPDATE authors listing
+    try {
+      dataInStore = client.readQuery({ query: GET_ALL_AUTHORS });
+      //console.log('update authors listing cache\n', dataInStore);
+
+      if (!dataInStore.allAuthors.map(p => p.name).includes(bookAdded.author.name)) {
+        client.writeQuery({
+          query: GET_ALL_AUTHORS,
+          data: { allAuthors: dataInStore.allAuthors.concat(bookAdded.author) },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  };
 
   const notify = (message) => {
     setErrorMessage(message);
@@ -76,6 +126,7 @@ const App = () => {
 
       <RecommendedBook
         show={page === 'recommended'}
+        setError={notify}
       />
 
     </div>
