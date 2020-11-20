@@ -1,6 +1,9 @@
-const { ApolloServer, UserInputError, gql, AuthenticationError } = require('apollo-server');
+const { ApolloServer, UserInputError, gql, AuthenticationError, PubSub } = require('apollo-server');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
+const pubsub = new PubSub();
+const BOOK_ADDED = 'BOOK_ADDED';
 
 const mongoose = require('mongoose');
 const Book = require('./models/book');
@@ -79,9 +82,18 @@ const typeDefs = gql`
       password: String!
     ): Token
   }
+
+  type Subscription {
+    bookAdded: Book
+  }
 `;
 
 const resolvers = {
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator([BOOK_ADDED]),
+    }
+  },
   Query: {
     bookCount: () => Book.countDocuments(),
     authorCount: () => Author.countDocuments(),
@@ -153,15 +165,60 @@ const resolvers = {
   },
   Author: {
     bookCount: async (parent) => {
-      // Generate bookCount field for the author
-      // 1. find the Object id of the author
-      // 2. find the books of the author using the obtained id
-      //console.log(parent);
-      const author = await Author.findOne({ name: parent.name });
-      if (!author) {
-        return null;
+      /* Generate bookCount field for the author
+
+      (parent) has two types of content depending on the query e.g.:
+
+      (1) allAuthors
+      Why id and not _id:
+        Check the above allAuthors() resolver function's return object.
+
+      query {
+        allAuthors {
+          id
+          name
+          bookCount
+        }
       }
-      const bookCount = await Book.find({ author: author._id });
+
+      parent: {
+        id: 5fb68002c6b4fb796928062f,
+        name: 'Robert Martin',
+        born: 1952,
+        bookCount: 2
+      }
+
+      ====================
+
+      (2) allBooks
+      Why _id:
+        Check the above allBooks() resolver function's return array of objects.
+
+      query {
+        allAbooks {
+          title
+          author {
+            id
+            name
+            bookCount
+          }
+        }
+      }
+
+      parent: {
+        _id: 5fb68002c6b4fb796928062f,
+        name: 'Robert Martin',
+        born: 1952,
+        __v: 0
+      }
+
+      ====================
+
+      Note: for this implementation I decided to handle the 'id', '_id' issue here.
+      */
+      //console.log(parent);
+      const id = parent._id || parent.id;
+      const bookCount = await Book.find({ author: id });
       return bookCount.length;
     },
   },
@@ -200,6 +257,8 @@ const resolvers = {
       // generate bookCount field for the author
       const bookCount = await Book.find({ author: author._id });
       book.author.bookCount = bookCount.length;
+
+      pubsub.publish(BOOK_ADDED, { bookAdded: book });
 
       return book;
     },
@@ -260,7 +319,7 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, JWT_SECRET) };
     },
-  }
+  },
 };
 
 const server = new ApolloServer({
@@ -276,6 +335,7 @@ const server = new ApolloServer({
   },
 });
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`);
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`);
 });
