@@ -5,6 +5,7 @@
 Remember to add the .env file to this directory
 
 ```
+$ cat .env
 MONGODB_URI=mongodb+srv://<address>  
 SECRET=<secret phrase>  
 ```
