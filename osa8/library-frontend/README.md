@@ -12,7 +12,11 @@ is received. This is because I am using [Strict Mode](https://reactjs.org/docs/s
 run the app in development mode. 
 Check e.g. the explanation found from the above link:
 ```
-Strict mode can’t automatically detect side effects for you, but it can help you spot them by making them a little more deterministic. This is done by intentionally double-invoking the following functions:
+https://reactjs.org/docs/strict-mode.html
+
+Strict mode can’t automatically detect side effects for you, 
+but it can help you spot them by making them a little more deterministic. 
+This is done by intentionally double-invoking the following functions:
 
 * Class component constructor, render, and shouldComponentUpdate methods
 * Class component static getDerivedStateFromProps method
