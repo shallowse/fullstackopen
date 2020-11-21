@@ -23,7 +23,7 @@ function parseArguments(args: Array<string>): BmiValues {
 };
 
 // https://en.wikipedia.org/wiki/Body_mass_index
-function calculateBmi(height: number, mass: number): string {
+export function calculateBmi(height: number, mass: number): string {
   if (height <= 0 || mass <= 0) {
     throw new Error('Provided values were negative or zero');
   }
