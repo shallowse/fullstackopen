@@ -65,7 +65,7 @@ function parseArguments(args: Array<string>): ExerciseArgs {
   dailyHours: [ x: number | x is number of hours exercised per day ]
   targetDailyAmount: target amount of daily exercise hours
 */
-function calculateExercises(dailyHours: Array<number>, targetDailyAmount: number): Result {
+export default function calculateExercises(dailyHours: Array<number>, targetDailyAmount: number): Result {
   const periodLength: number = dailyHours.length;
   const trainingDays: number = dailyHours.filter(x => x !== 0).length;
 
@@ -73,7 +73,7 @@ function calculateExercises(dailyHours: Array<number>, targetDailyAmount: number
   const averageHours: number = trainingHours / periodLength;
   const success: boolean = averageHours >= targetDailyAmount;
 
-  let rating: Rating;
+  let rating: Rating = 1;
   let ratingDescription: string = '';
   if (averageHours < targetDailyAmount) {
     rating = 1;
@@ -97,9 +97,13 @@ function calculateExercises(dailyHours: Array<number>, targetDailyAmount: number
   };
 }
 
-try {
-  const { dailyHours, targetDailyAmount } = parseArguments(process.argv);
-  console.log(calculateExercises(dailyHours, targetDailyAmount));
-} catch (error) {
-  console.log('ERROR: ', error.message);
+// https://nodejs.org/docs/latest/api/modules.html#modules_accessing_the_main_module
+// Run directly
+if (require.main === module) {
+  try {
+    const { dailyHours, targetDailyAmount } = parseArguments(process.argv);
+    console.log(calculateExercises(dailyHours, targetDailyAmount));
+  } catch (error) {
+    console.log('ERROR: ', error.message);
+  }
 }

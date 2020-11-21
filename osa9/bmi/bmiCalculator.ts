@@ -23,7 +23,7 @@ function parseArguments(args: Array<string>): BmiValues {
 };
 
 // https://en.wikipedia.org/wiki/Body_mass_index
-export function calculateBmi(height: number, mass: number): string {
+export default function calculateBmi(height: number, mass: number): string {
   if (height <= 0 || mass <= 0) {
     throw new Error('Provided values were negative or zero');
   }
@@ -54,9 +54,12 @@ export function calculateBmi(height: number, mass: number): string {
   return retMsg;
 }
 
-try {
-  const { height, mass } = parseArguments(process.argv);
-  console.log(calculateBmi(height, mass));
-} catch (error) {
-  console.log('Error, something went wrong, message: ', error.message);
+// https://nodejs.org/docs/latest/api/modules.html#modules_accessing_the_main_module
+if (require.main === module) {
+  try {
+    const { height, mass } = parseArguments(process.argv);
+    console.log(calculateBmi(height, mass));
+  } catch (error) {
+    console.log('Error, something went wrong, message: ', error.message);
+  }
 }
