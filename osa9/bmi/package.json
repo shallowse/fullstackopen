@@ -1,12 +1,11 @@
 {
-  "name": "first-steps-with-typescript",
+  "name": "bmicalculator",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "ts-node": "ts-node",
-    "calculateBmi": "ts-node bmiCalculators.ts",
-    "calculateExercises": "ts-node exerciseCalculator.ts",
+    "calculateBmi": "ts-node bmiCalculator.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

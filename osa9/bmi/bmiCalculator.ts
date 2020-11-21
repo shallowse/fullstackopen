@@ -3,10 +3,7 @@ interface BmiValues {
   mass: number;
 }
 
-// Note: Changed this to parseArgs. Noticed that the linter complained about
-// duplicate function found (even though the 'duplicate' was in a separate file
-// called exerciseCalculator.ts
-function parseArgs(args: Array<string>): BmiValues {
+function parseArguments(args: Array<string>): BmiValues {
   if (args.length !== 4) {
     throw new Error('Usage: npm run calculateBmi <height> <weight>');
   }
@@ -58,7 +55,7 @@ function calculateBmi(height: number, mass: number): string {
 }
 
 try {
-  const { height, mass } = parseArgs(process.argv);
+  const { height, mass } = parseArguments(process.argv);
   console.log(calculateBmi(height, mass));
 } catch (error) {
   console.log('Error, something went wrong, message: ', error.message);
