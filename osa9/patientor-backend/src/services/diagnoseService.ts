@@ -1,4 +1,4 @@
-import diagnoseData from '../../data/diagnoses.json';
+import diagnoseData from '../../data/diagnoses';
 import { DiagnoseEntry } from '../types';
 
 const getEntries = (): Array<DiagnoseEntry> => {

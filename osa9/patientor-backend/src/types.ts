@@ -4,13 +4,34 @@ export interface DiagnoseEntry {
   latin?: string;
 }
 
+// https://www.ons.gov.uk/economy/environmentalaccounts/articles/whatisthedifferencebetweensexandgender/2019-02-21
+// https://business.linkedin.com/talent-solutions/blog/diversity/2019/15-gender-identity-terms-for-inclusive-workplace
+export enum Gender {
+  male                = 'male',
+  female              = 'female',
+  queer               = 'queer',
+  cisgender           = 'cisgender',
+  cishet              = 'cishet',
+  nonbinary           = 'nonbinary',
+  genderqueer         = 'genderqueer',
+  transgender         = 'transgender',
+  gendernonconforming = 'gendernonconforming',
+  genderfluid         = 'genderfluid',
+  intersex            = 'intersex',
+  agender             = 'agender',
+  genderquestioning   = 'genderquestioning',
+  gendertransition    = 'gendertransition',
+  other               = 'other',
+}
+
 export interface PatientEntry {
   id: string;
   name: string;
   dateOfBirth: string;
   ssn: string;
-  gender: string;
+  gender: Gender;
   occupation: string;
 }
 
 export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
+export type NewPatientEntry = Omit<PatientEntry, 'id'>;
