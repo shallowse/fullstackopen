@@ -5,7 +5,7 @@ import { Container, Header, Icon } from 'semantic-ui-react';
 
 import { apiBaseUrl } from '../constants';
 import { Patient } from '../types';
-import { useStateValue } from '../state';
+import { useStateValue, updatePatient } from '../state';
 
 // https://www.pluralsight.com/guides/react-router-typescript
 type TParams = { id: string };
@@ -37,7 +37,7 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
             `${apiBaseUrl}/patients/${id}`
           );
           setLoaded(true);
-          dispatch({ type: 'UPDATE_PATIENT', payload: singlePatientFromApi });
+          dispatch(updatePatient(singlePatientFromApi));
         } catch (e) {
           console.error(e);
         }
