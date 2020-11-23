@@ -30,13 +30,15 @@ export const reducer = (state: State, action: Action): State => {
       console.log('SET_PATIENT_LIST\n', retState);
       return retState;
     case 'ADD_PATIENT':
-      return {
+      retState = {
         ...state,
         patients: {
           ...state.patients,
           [action.payload.id]: action.payload
         }
       };
+      console.log('ADD_PATIENT\n', retState);
+      return retState;
     case 'UPDATE_PATIENT':
       // There are two cases for this:
       //

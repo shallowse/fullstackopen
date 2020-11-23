@@ -16,6 +16,20 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
   const [{ patients }, dispatch] = useStateValue();
 
   useEffect(() => {
+    // 9.17.
+    // ...Fetch the data from the enpoint created in the previous exercise.
+    // ...After fetching the patient information from the backend,
+    // ...add the fetched information to the application's state.
+    // ...Do not fetch the information if it already is in the app state,
+    // ...i.e. if the user is visiting the same patient's information many times.
+    //
+    // I use the 'ssn' field to check whether the patient's information has been
+    // already accessed and updated
+    if (patients[id] && patients[id].ssn) {
+      setLoaded(true);
+      return;
+    }
+
     if (!loaded) {
       const fetchPatient = async () => {
         try {
@@ -30,7 +44,7 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
       };
       fetchPatient();
     }
-  }, [id, loaded, dispatch]);
+  }, [id, loaded, dispatch, patients]);
 
   if (!loaded || Object.keys(patients).length === 0) {
     return <p>Loading patient data...</p>;
