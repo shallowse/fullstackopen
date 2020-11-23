@@ -50,10 +50,11 @@ export const reducer = (state: State, action: Action): State => {
       // Now the state has been set by 'SET_PATIENT_LIST' and there are patients in the state
 
       // (1) If there are already patients in the list
-      //     Let's update the 'ssn' to an existing patient
+      //     Let's update the 'ssn' and 'entries' to an existing patient
       if (Object.keys(state.patients).length > 0) {
         const patient = state.patients[action.payload.id];
         patient.ssn = action.payload.ssn;
+        patient.entries = action.payload.entries;
         retState = {
           ...state,
           patients: {

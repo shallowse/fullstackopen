@@ -51,11 +51,29 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
   }
 
   const patient = patients[id];
+  if (!patient.entries) {
+    return <p>Waiting for patient data update...</p>;
+  }
+
+  //console.log('patient', patient);
+
   return (
     <Container>
       <Header as='h2'>{patient.name}&nbsp;&nbsp;<small>{patient.gender}</small></Header>
       <p><Icon name='address card' />ssn: {patient.ssn}</p>
       <p><Icon name='building' />occupation: {patient.occupation}</p>
+
+      <Header as='h3'>entries</Header>
+      {
+        patient.entries.map(entry => (
+          <div key={entry.date}>
+            <p>{entry.date}{' '}<em>{entry.description}</em></p>
+            <ul>
+              {entry.diagnosisCodes && entry.diagnosisCodes.map(code => <li key={code}>{code}</li>)}
+            </ul>
+          </div>
+        ))
+      }
     </Container>
   );
 };
