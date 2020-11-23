@@ -13,7 +13,7 @@ type TParams = { id: string };
 const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
   const id = match.params.id;
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
 
   useEffect(() => {
     // 9.17.
@@ -46,7 +46,7 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
     }
   }, [id, loaded, dispatch, patients]);
 
-  if (!loaded || Object.keys(patients).length === 0) {
+  if (!loaded || Object.keys(patients).length === 0 || Object.keys(diagnoses).length === 0) {
     return <p>Loading patient data...</p>;
   }
 
@@ -69,7 +69,10 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
           <div key={entry.date}>
             <p>{entry.date}{' '}<em>{entry.description}</em></p>
             <ul>
-              {entry.diagnosisCodes && entry.diagnosisCodes.map(code => <li key={code}>{code}</li>)}
+              {entry.diagnosisCodes &&
+                entry.diagnosisCodes.map(code =>
+                  (<li key={code}>{code}{' '}{diagnoses[code].name}</li>)
+                )}
             </ul>
           </div>
         ))
