@@ -56,7 +56,7 @@ export const reducer = (state: State, action: Action): State => {
           ...state,
           patients: {
             ...state.patients,
-            patient,
+            [patient.id]: patient,
           }
         }
         console.log('UPDATE_PATIENT, case', patient.name, '\n', retState);
