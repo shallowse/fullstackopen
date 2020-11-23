@@ -5,9 +5,21 @@ export interface Diagnosis {
 }
 
 export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other"
+  Male                = 'male',
+  Female              = 'female',
+  Queer               = 'queer',
+  Cisgender           = 'cisgender',
+  Cishet              = 'cishet',
+  Nonbinary           = 'nonbinary',
+  Genderqueer         = 'genderqueer',
+  Transgender         = 'transgender',
+  Gendernonconforming = 'gendernonconforming',
+  Genderfluid         = 'genderfluid',
+  Intersex            = 'intersex',
+  Agender             = 'agender',
+  Genderquestioning   = 'genderquestioning',
+  Gendertransition    = 'gendertransition',
+  Other               = 'other',
 }
 
 export interface Patient {

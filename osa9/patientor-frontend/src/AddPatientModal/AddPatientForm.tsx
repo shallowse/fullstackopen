@@ -16,11 +16,15 @@ interface Props {
   onCancel: () => void;
 }
 
+/*
 const genderOptions: GenderOption[] = [
   { value: Gender.Male, label: "Male" },
   { value: Gender.Female, label: "Female" },
   { value: Gender.Other, label: "Other" }
 ];
+*/
+const genderOptions: GenderOption[] =
+  Object.values(Gender).map(entry => { return { value: entry, label: entry }; });
 
 export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   return (
