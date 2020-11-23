@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Header, Icon } from 'semantic-ui-react';
 
+import EntryDetails from './EntryDetails';
 import { apiBaseUrl } from '../constants';
 import { Patient } from '../types';
 import { useStateValue, updatePatient } from '../state';
@@ -56,7 +57,6 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
   }
 
   //console.log('patient', patient);
-
   return (
     <Container>
       <Header as='h2'>{patient.name}&nbsp;&nbsp;<small>{patient.gender}</small></Header>
@@ -65,20 +65,11 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
 
       <Header as='h3'>entries</Header>
       {
-        patient.entries.map(entry => (
-          <div key={entry.date}>
-            <p>{entry.date}{' '}<em>{entry.description}</em></p>
-            <ul>
-              {entry.diagnosisCodes &&
-                entry.diagnosisCodes.map(code =>
-                  (<li key={code}>{code}{' '}{diagnoses[code].name}</li>)
-                )}
-            </ul>
-          </div>
-        ))
+        patient.entries.map(entry => <EntryDetails key={entry.date} entry={entry} />)
       }
     </Container>
   );
+
 };
 
 export default PatientDetailPage;
