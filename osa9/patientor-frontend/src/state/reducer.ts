@@ -17,10 +17,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         patients: {
-          ...action.payload.reduce(
-            (memo, patient) => ({ ...memo, [patient.id]: patient }),
-            {}
-          ),
+          ...action.payload.reduce( (memo, patient) => ({ ...memo, [patient.id]: patient }), {} ),
           ...state.patients
         }
       };
