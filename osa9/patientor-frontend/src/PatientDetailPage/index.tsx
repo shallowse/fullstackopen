@@ -12,17 +12,17 @@ type TParams = { id: string };
 
 const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
   const id = match.params.id;
-  const [person, setPerson] = useState<Patient | null>(null);
-  const [, dispatch] = useStateValue();
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [{ patients }, dispatch] = useStateValue();
 
   useEffect(() => {
-    if (!person) {
+    if (!loaded) {
       const fetchPatient = async () => {
         try {
           const { data: singlePatientFromApi } = await axios.get<Patient>(
             `${apiBaseUrl}/patients/${id}`
           );
-          setPerson(singlePatientFromApi);
+          setLoaded(true);
           dispatch({ type: 'UPDATE_PATIENT', payload: singlePatientFromApi });
         } catch (e) {
           console.error(e);
@@ -30,22 +30,19 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
       };
       fetchPatient();
     }
+  }, [id, loaded, dispatch]);
 
-  }, [id, person, dispatch]);
-
-  if (person === null) {
+  if (!loaded || Object.keys(patients).length === 0) {
     return <p>Loading patient data...</p>;
   }
 
-  //console.log(person);
+  const patient = patients[id];
   return (
     <Container>
-      <Header as='h2'>{person.name}&nbsp;&nbsp;<small>{person.gender}</small></Header>
-      <p><Icon name='address card' />ssn: {person.ssn}</p>
-      <p><Icon name='building' />occupation: {person.occupation}</p>
+      <Header as='h2'>{patient.name}&nbsp;&nbsp;<small>{patient.gender}</small></Header>
+      <p><Icon name='address card' />ssn: {patient.ssn}</p>
+      <p><Icon name='building' />occupation: {patient.occupation}</p>
     </Container>
-
-
   );
 };
 
