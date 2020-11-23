@@ -43,7 +43,7 @@ TypeError: Cannot assign to read only property 'jsx' of object '#<Object>'
 ...
 ```
 
-Seems that there is and open issue about this:
+Seems that there is and open issue about this (last accessed 22.11.2020):
 [https://github.com/facebook/create-react-app/issues/9960](https://github.com/facebook/create-react-app/issues/9960)
 
 The same thread also highlights a [workaround](https://github.com/facebook/create-react-app/issues/9960#issuecomment-730722889) that I utilized for ```my-app```.

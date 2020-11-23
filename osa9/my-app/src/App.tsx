@@ -48,10 +48,9 @@ const Header: React.FC<CourseName> = ({ name }) => {
   );
 };
 
-const Part: React.FC<Course> = (props) => {
+const Part: React.FC<Course> = ({ course }) => {
   //console.log(props);
 
-  const course: CoursePart = props.course;
   let retElem: JSX.Element;
 
   switch (course.name) {
