@@ -2,6 +2,8 @@ import React from 'react';
 import { Feed, Icon, Divider, List } from 'semantic-ui-react';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
 
+import { useStateValue } from '../state';
+
 import {
   Entry,
   EntryType,
@@ -96,6 +98,17 @@ const Hospital: React.FC<{ entry: HospitalEntry }> = ({ entry }) => {
 }
 
 const OccupationalHealthcare: React.FC<{ entry: OccupationalHealthcareEntry }> = ({ entry }) => {
+  const [{ diagnoses }] = useStateValue();
+
+  //console.log(entry.diagnosisCodes);
+  //console.log(diagnoses);
+
+  const mapDiagnosisCodesToNames = () => {
+    const tmp = entry.diagnosisCodes?.map((c, idx) => <p key={idx}>{c}{' '}{diagnoses[c].name}</p>);
+    //console.log('TMP', tmp);
+    return tmp;
+  };
+
   return (
     <div>
       <Feed>
@@ -111,22 +124,41 @@ const OccupationalHealthcare: React.FC<{ entry: OccupationalHealthcareEntry }> =
             </Feed.Summary>
             {entry.sickLeave &&
               <List>
+
                 <List.Item>
+                  <List.Icon name='calendar alternate outline' />
                   <List.Content>
                     <List.Header>Sickleave</List.Header>
                     <List.List>
+
                       <List.Item>
-                        <List.Content>
-                          <List.Header>start date:</List.Header>
-                          <List.Description>{entry.sickLeave?.startDate}</List.Description>
-                        </List.Content>
+                        <List.List>
+                          <List.Content>
+                            <List.Header>start date:</List.Header>
+                            <List.Description>{entry.sickLeave?.startDate}</List.Description>
+                          </List.Content>
+                        </List.List>
                       </List.Item>
+
                       <List.Item>
-                        <List.Content>
-                          <List.Header>end date:</List.Header>
-                          <List.Description>{entry.sickLeave?.endDate}</List.Description>
-                        </List.Content>
+                        <List.List>
+                          <List.Content>
+                            <List.Header>end date:</List.Header>
+                            <List.Description>{entry.sickLeave?.endDate}</List.Description>
+                          </List.Content>
+                        </List.List>
                       </List.Item>
+
+                    </List.List>
+                  </List.Content>
+                </List.Item>
+
+                <List.Item>
+                  <List.Icon name='folder open outline' />
+                  <List.Content>
+                    <List.Header>Diagnoses:</List.Header>
+                    <List.List>
+                      {mapDiagnosisCodesToNames()}
                     </List.List>
                   </List.Content>
                 </List.Item>
