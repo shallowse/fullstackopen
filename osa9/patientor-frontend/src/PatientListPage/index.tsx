@@ -33,7 +33,6 @@ const PatientListPage: React.FC = () => {
       closeModal();
     } catch (e) {
       console.error(e.response.data);
-      //setError(e.response.data.error);
       setError(e.response.data);
     }
   };
