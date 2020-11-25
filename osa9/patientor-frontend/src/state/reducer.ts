@@ -17,7 +17,12 @@ export type Action =
   | {
     type: 'SET_DIAGNOSES_LIST';
     payload: Diagnose[];
+  }
+  | {
+    type: 'UPDATE_PATIENT_WITH_NEW_ENTRY';
+    payload: Patient;
   };
+
 
 export const reducer = (state: State, action: Action): State => {
   let retState: State;
@@ -65,7 +70,7 @@ export const reducer = (state: State, action: Action): State => {
             ...state.patients,
             [patient.id]: patient,
           }
-        }
+        };
         console.log('UPDATE_PATIENT, case', patient.name, '\n', retState);
       } else {
         // (2) If the user directly accessed /patients/:id there aren't
@@ -92,6 +97,18 @@ export const reducer = (state: State, action: Action): State => {
       };
       console.log('SET_DIAGNOSES_LIST\n', retDiagnoses);
       return retDiagnoses;
+    case 'UPDATE_PATIENT_WITH_NEW_ENTRY':
+      // Called when a new entry for patient has been added
+      const patient = action.payload;
+      retState = {
+        ...state,
+        patients: {
+          ...state.patients,
+          [patient.id]: patient,
+        }
+      };
+      console.log('UPDATE_PATIENT_WITH_NEW_ENTRY', retState);
+      return retState;
     default:
       return state;
   }
@@ -101,7 +118,7 @@ export const updatePatient = (patient: Patient): Action => {
   return {
     type: 'UPDATE_PATIENT',
     payload: patient,
-  }
+  };
 };
 
 export const setPatientList = (patients: Patient[]): Action => {
@@ -116,11 +133,18 @@ export const addPatient = (patient: Patient): Action => {
     type: 'ADD_PATIENT',
     payload: patient,
   };
-}
+};
 
 export const setDiagnosesList = (diagnoses: Diagnose[]): Action => {
   return {
     type: 'SET_DIAGNOSES_LIST',
     payload: diagnoses,
+  };
+};
+
+export const updatePatientWithNewEntry = (patient: Patient): Action => {
+  return {
+    type: 'UPDATE_PATIENT_WITH_NEW_ENTRY',
+    payload: patient,
   };
 };

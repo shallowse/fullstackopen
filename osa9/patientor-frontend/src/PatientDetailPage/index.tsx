@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Header, Icon } from 'semantic-ui-react';
+import { Container, Header, Icon, Button } from 'semantic-ui-react';
 
 import EntryDetails from './EntryDetails';
 import { apiBaseUrl } from '../constants';
-import { Patient } from '../types';
-import { useStateValue, updatePatient } from '../state';
+import { Patient, EntryType, Entry } from '../types';
+import { useStateValue, updatePatient, updatePatientWithNewEntry } from '../state';
+
+import AddPatientEntryModal from '../AddPatientEntryModal';
+
+type EntryFormValues = Omit<Entry, 'id'>;
 
 // https://www.pluralsight.com/guides/react-router-typescript
 type TParams = { id: string };
@@ -15,6 +19,10 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
   const id = match.params.id;
   const [loaded, setLoaded] = useState<boolean>(false);
   const [{ patients, diagnoses }, dispatch] = useStateValue();
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>();
+  const [entryType, setEntryType] = useState<EntryType | undefined>();
 
   useEffect(() => {
     // 9.17.
@@ -40,12 +48,46 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
           setLoaded(true);
           dispatch(updatePatient(singlePatientFromApi));
         } catch (e) {
+          setError(e.response.data);
           console.error(e);
         }
       };
       fetchPatient();
     }
   }, [id, loaded, dispatch, patients]);
+
+
+  const openModal = (entryType: EntryType): void => {
+    setEntryType(entryType);
+    setModalOpen(true);
+  };
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+    setEntryType(undefined);
+  };
+
+  const submitNewEntry = async (values: Entry) => {
+    const newEntry = {
+      ...values,
+      type: entryType,
+    };
+    console.log('Submit New Entry:', newEntry);
+
+    try {
+      const { data: updatedPatientWithNewEntry } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        newEntry
+      );
+
+      dispatch(updatePatientWithNewEntry(updatedPatientWithNewEntry));
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
 
   if (!loaded || Object.keys(patients).length === 0 || Object.keys(diagnoses).length === 0) {
     return <p>Loading patient data...</p>;
@@ -65,8 +107,20 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
 
       <Header as='h3'>entries</Header>
       {
-        patient.entries.map(entry => <EntryDetails key={entry.date} entry={entry} />)
+        patient.entries.map((entry, idx) => <EntryDetails key={idx} entry={entry} />)
       }
+
+      <AddPatientEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+        entryType={entryType}
+      />
+
+      <Button onClick={() => openModal(EntryType.HealthCheck)}>Add <u>{EntryType.HealthCheck}</u> Entry</Button>
+      <Button onClick={() => openModal(EntryType.Hospital)}>Add <u>{EntryType.Hospital}</u> Entry</Button>
+      <Button onClick={() => openModal(EntryType.OccupationalHealthcare)}>Add <u>{EntryType.OccupationalHealthcare}</u> Entry</Button>
     </Container>
   );
 

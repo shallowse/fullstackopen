@@ -31,7 +31,7 @@ const HealthCheck: React.FC<{ entry: HealthCheckEntry }> = ({ entry }) => {
       healthIcon = 'warning';
       break;
     default:
-      healthIcon = 'ban'
+      healthIcon = 'ban';
   }
 
   return (
@@ -53,7 +53,7 @@ const HealthCheck: React.FC<{ entry: HealthCheckEntry }> = ({ entry }) => {
       <Divider />
     </div>
   );
-}
+};
 
 const Hospital: React.FC<{ entry: HospitalEntry }> = ({ entry }) => {
   return (
@@ -95,7 +95,7 @@ const Hospital: React.FC<{ entry: HospitalEntry }> = ({ entry }) => {
       <Divider />
     </div>
   );
-}
+};
 
 const OccupationalHealthcare: React.FC<{ entry: OccupationalHealthcareEntry }> = ({ entry }) => {
   const [{ diagnoses }] = useStateValue();
