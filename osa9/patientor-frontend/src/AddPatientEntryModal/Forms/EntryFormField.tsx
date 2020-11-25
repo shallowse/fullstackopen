@@ -2,7 +2,7 @@ import React from 'react';
 import { ErrorMessage, Field, FieldProps, FormikProps } from 'formik';
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 
-import { Diagnose } from '../types';
+import { Diagnose } from '../../types';
 
 interface TextProps extends FieldProps {
   label: string;

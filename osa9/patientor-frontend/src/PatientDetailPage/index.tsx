@@ -5,12 +5,10 @@ import { Container, Header, Icon, Button } from 'semantic-ui-react';
 
 import EntryDetails from './EntryDetails';
 import { apiBaseUrl } from '../constants';
-import { Patient, EntryType, Entry } from '../types';
+import { Patient, EntryType } from '../types';
 import { useStateValue, updatePatient, updatePatientWithNewEntry } from '../state';
 
 import AddPatientEntryModal from '../AddPatientEntryModal';
-
-type EntryFormValues = Omit<Entry, 'id'>;
 
 // https://www.pluralsight.com/guides/react-router-typescript
 type TParams = { id: string };
@@ -68,11 +66,51 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
     setEntryType(undefined);
   };
 
-  const submitNewEntry = async (values: Entry) => {
-    const newEntry = {
-      ...values,
+  const submitNewEntry = async (values: any) => {
+    let newEntry = {
       type: entryType,
     };
+
+    switch (entryType) {
+      case EntryType.HealthCheck:
+        newEntry = {
+          ...newEntry,
+          ...values,
+        };
+        break;
+      case EntryType.Hospital:
+        // Note: The backend implementation discards the received and submitted extra values
+        // dischargeDate and dischargeCriteria
+        newEntry = {
+          ...newEntry,
+          ...values,
+          discharge: {
+            date: values.dischargeDate,
+            criteria: values.dischargeCriteria
+          },
+        };
+        break;
+      case EntryType.OccupationalHealthcare:
+        if (values.sickLeaveStartDate && values.sickLeaveEndDate) {
+          newEntry = {
+            ...newEntry,
+            ...values,
+            sickLeave: {
+              startDate: values.sickLeaveStartDate,
+              endDate: values.sickLeaveEndDate,
+            },
+          };
+        } else {
+          newEntry = {
+            ...newEntry,
+            ...values,
+          };
+        }
+        break;
+      default:
+        setError('Incorrect type received');
+        return;
+    }
     console.log('Submit New Entry:', newEntry);
 
     try {
