@@ -84,7 +84,7 @@ let users = [
   },
 ];
 
-async function connectToMongo() {
+async function createAuthorsBooksUsers() {
   try {
     await mongoose.connect(MONGODB_URI,
       {
@@ -94,15 +94,8 @@ async function connectToMongo() {
         useCreateIndex: true
       }
     );
-    console.log('connected to MongoDB');
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-}
+    console.log('Connected to MongoDB');
 
-async function createAuthorsBooksUsers() {
-  try {
     console.log('DELETE DATA ...\n');
     await Author.deleteMany({});
     await Book.deleteMany({});
@@ -129,5 +122,4 @@ async function createAuthorsBooksUsers() {
   }
 }
 
-connectToMongo();
 createAuthorsBooksUsers();

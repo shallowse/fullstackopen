@@ -278,7 +278,7 @@ const resolvers = {
 
       let author;
       try {
-        author = await Author.findOneAndUpdate({ _id: authorFound._id }, { born: args.setBornTo });
+        author = await Author.findOneAndUpdate({ _id: authorFound._id }, { born: args.setBornTo }, { new: true });
       } catch (error) {
         //console.log(error);
         throw new UserInputError(error.message, {

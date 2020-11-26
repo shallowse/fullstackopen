@@ -16,5 +16,5 @@ Create some initial data (books, authors, users) to the database by running the
 createBooksAuthorsUsers.js command
 
 ```
-Usage: node createBooksAuthorsUsers.js
+Usage: node createAuthorsBooksUsers.js
 ```
