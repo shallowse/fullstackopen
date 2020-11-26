@@ -19,7 +19,8 @@ const Books = (props) => {
       variables: { genre: state },
       onError: (error) => {
         console.log(error);
-      }
+      },
+      fetchPolicy: 'cache-and-network',
     },
   );
 
@@ -48,7 +49,6 @@ const Books = (props) => {
   let booksToShow = resultAllBooks.data.allBooks;
   if (state !== 'all genres' && selected_genre_data) {
     booksToShow = selected_genre_data.allBooks;
-    booksToShow = booksToShow.filter(S => S.genres.includes(state));
   }
 
   //console.log(booksToShow);

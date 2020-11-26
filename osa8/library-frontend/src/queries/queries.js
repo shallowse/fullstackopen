@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 export const GET_ALL_AUTHORS = gql`
   query {
     allAuthors {
-      name
       id
+      name
       born
       bookCount
     }
@@ -15,6 +15,7 @@ const BOOK_DETAILS = gql`
   fragment BookDetails on Book {
     title
     author {
+      id
       name
       born
       bookCount

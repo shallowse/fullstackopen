@@ -118,7 +118,9 @@ const resolvers = {
 
       } else if (args.author && !args.genre) {
         const S = await Author.findOne({ name: args.author });
-        retArray = await Book.find({ author: S._id }).populate('author');
+        if (S !== null) {
+          retArray = await Book.find({ author: S._id }).populate('author');
+        }
 
       } else if (!args.author && args.genre) {
         retArray = await Book.find({ genres: { $in: [args.genre] } }).populate('author');
@@ -195,7 +197,7 @@ const resolvers = {
         Check the above allBooks() resolver function's return array of objects.
 
       query {
-        allAbooks {
+        allBooks {
           title
           author {
             id
@@ -254,10 +256,6 @@ const resolvers = {
         });
       }
 
-      // generate bookCount field for the author
-      const bookCount = await Book.find({ author: author._id });
-      book.author.bookCount = bookCount.length;
-
       pubsub.publish(BOOK_ADDED, { bookAdded: book });
 
       return book;
@@ -285,10 +283,6 @@ const resolvers = {
           invalidArgs: args,
         });
       }
-
-      // generate bookCount field for the author
-      const bookCount = await Book.find({ author: author._id });
-      author.bookCount = bookCount.length;
 
       return author;
     },
