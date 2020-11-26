@@ -4,24 +4,23 @@ import { Field, Formik, Form } from 'formik';
 
 import { TextField, NumberField, DiagnosisSelection } from './EntryFormField';
 
-import { useStateValue } from '../../state';
+import { Diagnose } from '../../types';
 
 interface SubProps {
   onSubmit: (values: any) => void;
   onCancel: () => void;
+  diagnoses: Diagnose[];
 }
 
-const HealthCheckForm: React.FC<SubProps> = ({ onSubmit, onCancel }) => {
-  const [{ diagnoses }] = useStateValue();
+const HealthCheckForm: React.FC<SubProps> = ({ onSubmit, onCancel, diagnoses }) => {
   //console.log('DIAGNOSES', Object.values(diagnoses));
-
   return (
     <Formik
       initialValues={{
         date: '',
         specialist: '',
         description: '',
-        diagnosisCodes: [''],
+        diagnosisCodes: [],
         healthCheckRating: 0,
       }}
       onSubmit={onSubmit}
@@ -41,7 +40,7 @@ const HealthCheckForm: React.FC<SubProps> = ({ onSubmit, onCancel }) => {
           errors.healtCheckRating = requiredError;
         }
         // TODO: add check for values.dia
-        // if (values.diagnosiscodes )
+        // if (values.diagnosiscodes)
 
         return errors;
       }}
@@ -80,7 +79,8 @@ const HealthCheckForm: React.FC<SubProps> = ({ onSubmit, onCancel }) => {
               //name='diagnosisCodes'
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
-              diagnoses={Object.values(diagnoses)}
+              //diagnoses={Object.values(diagnoses)}
+              diagnoses={diagnoses}
               component={DiagnosisSelection}
             />
 

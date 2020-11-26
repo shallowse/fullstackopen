@@ -6,6 +6,8 @@ import OccupationalHealthcareForm from './Forms/OccupationalHealthcareForm';
 
 import { EntryType } from '../types';
 
+import { useStateValue } from '../state';
+
 interface Props {
   onSubmit: (values: any) => void;
   onCancel: () => void;
@@ -13,13 +15,16 @@ interface Props {
 }
 
 const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel, entryType }) => {
+  const [{ diagnoses }] = useStateValue();
+  const diagnosesArray = Object.values(diagnoses);
+
   switch (entryType) {
     case EntryType.HealthCheck:
-      return <HealthCheckForm onSubmit={onSubmit} onCancel={onCancel} />;
+      return <HealthCheckForm onSubmit={onSubmit} onCancel={onCancel} diagnoses={diagnosesArray} />;
     case EntryType.Hospital:
-      return <HospitalForm onSubmit={onSubmit} onCancel={onCancel} />
+      return <HospitalForm onSubmit={onSubmit} onCancel={onCancel} diagnoses={diagnosesArray} />;
     case EntryType.OccupationalHealthcare:
-      return <OccupationalHealthcareForm onSubmit={onSubmit} onCancel={onCancel} />
+      return <OccupationalHealthcareForm onSubmit={onSubmit} onCancel={onCancel} diagnoses={diagnosesArray} />;
     default:
       console.log('ERROR');
   }

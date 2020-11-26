@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Header, Icon, Button } from 'semantic-ui-react';
+import { Container, Header, Icon, Button, Divider, List } from 'semantic-ui-react';
 
 import EntryDetails from './EntryDetails';
 import { apiBaseUrl } from '../constants';
@@ -101,7 +101,7 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
             },
           };
         } else {
-          newEntry = {
+          newEntry = {
             ...newEntry,
             ...values,
           };
@@ -145,7 +145,7 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
 
       <Header as='h3'>entries</Header>
       {
-        patient.entries.map((entry, idx) => <EntryDetails key={idx} entry={entry} />)
+        patient.entries.map(entry => <EntryDetails key={entry.id} entry={entry} />)
       }
 
       <AddPatientEntryModal
@@ -159,6 +159,24 @@ const PatientDetailPage = ({ match }: RouteComponentProps<TParams>) => {
       <Button onClick={() => openModal(EntryType.HealthCheck)}>Add <u>{EntryType.HealthCheck}</u> Entry</Button>
       <Button onClick={() => openModal(EntryType.Hospital)}>Add <u>{EntryType.Hospital}</u> Entry</Button>
       <Button onClick={() => openModal(EntryType.OccupationalHealthcare)}>Add <u>{EntryType.OccupationalHealthcare}</u> Entry</Button>
+
+      <Divider />
+      <Header size='small'>Legend</Header>
+      <List>
+        <List.Item>
+          <List.Icon name='doctor' />
+          <List.Content>{EntryType.HealthCheck}</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Icon name='hospital' />
+          <List.Content>{EntryType.Hospital}</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Icon name='heart' />
+          <List.Content>{EntryType.OccupationalHealthcare}</List.Content>
+        </List.Item>
+      </List>
+
     </Container>
   );
 

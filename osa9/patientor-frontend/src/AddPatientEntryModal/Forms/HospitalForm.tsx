@@ -5,16 +5,16 @@ import { Field, Formik, Form } from 'formik';
 
 import { TextField, DiagnosisSelection } from './EntryFormField';
 
-import { useStateValue } from '../../state';
+import { Diagnose } from '../../types';
 
 interface SubProps {
   onSubmit: (values: any) => void;
   onCancel: () => void;
+  //diagnoses: { [code: string]: Diagnose };
+  diagnoses: Diagnose[];
 }
 
-const HospitalForm: React.FC<SubProps> = ({ onSubmit, onCancel }) => {
-  const [{ diagnoses }] = useStateValue();
-
+const HospitalForm: React.FC<SubProps> = ({ onSubmit, onCancel, diagnoses }) => {
   return (
     <Formik
       initialValues={{
@@ -76,7 +76,8 @@ const HospitalForm: React.FC<SubProps> = ({ onSubmit, onCancel }) => {
               //name='diagnosisCodes'
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
-              diagnoses={Object.values(diagnoses)}
+              //diagnoses={Object.values(diagnoses)}
+              diagnoses={diagnoses}
               component={DiagnosisSelection}
             />
 
