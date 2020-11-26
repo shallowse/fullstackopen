@@ -24,3 +24,7 @@ This is done by intentionally double-invoking the following functions:
 * State updater functions (the first argument to setState)
 * Functions passed to useState, useMemo, or useReducer
 ```
+
+## Note about first time running the app
+
+In this implementation's usage scenario it is expected, once the user first time loads ```http://localhost:3000```, that the user will also click the ```books``` button to have the app load the books.
