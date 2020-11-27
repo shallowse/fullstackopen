@@ -1,6 +1,6 @@
 import express from 'express';
-import calculateBmi from '../bmi';
-import calculateExercises from '../excercise-calculator';
+import calculateBmi from './bmiCalculator';
+import calculateExercises from './exerciseCalculator';
 
 const app = express();
 const port = 3002;
@@ -65,8 +65,8 @@ app.post('/exercises', (req, res) => {
   }
 
   const target = Number(req.body.target);
-  if (isNaN(target)) {
-    res.status(400).json({ error: 'malformatted parameters' });
+  if (isNaN(target) || target < 0) {
+    res.status(400).json({ error: 'malformatted parameter: target' });
     return;
   }
 

@@ -20,7 +20,7 @@ function parseArguments(args: Array<string>): BmiValues {
     height,
     mass,
   };
-};
+}
 
 // https://en.wikipedia.org/wiki/Body_mass_index
 export default function calculateBmi(height: number, mass: number): string {

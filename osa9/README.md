@@ -3,8 +3,6 @@
 ```
 .
 ├── REAME.md
-├── bmi
-├── excercise-calculator
 ├── my-app
 ├── patientor-backend
 ├── patientor-frontend
@@ -15,8 +13,6 @@
 
 ```
 .
-├── bmi
-├── excercise-calculator
 └── web-backend
 ==> Exercises: 9.1.-9.7.
 

@@ -62,7 +62,7 @@ function parseArguments(args: Array<string>): ExerciseArgs {
 }
 
 /*
-  dailyHours: [ x: number | x is number of hours exercised per day ]
+  dailyHours: [ x: number | x is number of hours exercised per day]
   targetDailyAmount: target amount of daily exercise hours
 */
 export default function calculateExercises(dailyHours: Array<number>, targetDailyAmount: number): Result {
@@ -74,7 +74,7 @@ export default function calculateExercises(dailyHours: Array<number>, targetDail
   const success: boolean = averageHours >= targetDailyAmount;
 
   let rating: Rating = 1;
-  let ratingDescription: string = '';
+  let ratingDescription = '';
   if (averageHours < targetDailyAmount) {
     rating = 1;
     ratingDescription = 'target not reached';
