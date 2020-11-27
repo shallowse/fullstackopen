@@ -1,9 +1,5 @@
 import React from 'react';
 
-export interface CourseName {
-  name: string;
-}
-
 interface CoursePartBase {
   name: string;
   exerciseCount: number;
@@ -33,6 +29,10 @@ interface CourseAddYourOwn extends CoursePartBase, CourseDescription {
 }
 
 type CoursePart = CoursePartOne | CoursePartTwo | CoursePartThree | CourseAddYourOwn;
+
+interface CourseName {
+  name: string;
+}
 
 interface Courses {
   courseParts: CoursePart[];
@@ -88,6 +88,7 @@ const Content: React.FC<Courses> = ({ courseParts }) => {
   );
   return <div>Hello</div>;
 }
+
 const Total: React.FC<Courses> = ({ courseParts }) => {
   return (
     <p>
