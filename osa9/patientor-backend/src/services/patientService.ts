@@ -3,9 +3,9 @@ import patientData from '../../data/patients';
 import { toNewPatient, addEntryToPatient } from './utils';
 import { Patient, NewPatient, PublicPatient, Entry } from '../types';
 
-let patients: Array<Patient> = patientData;
+let patients: Patient[] = patientData;
 
-const getNonSensitiveEntries = (): Array<PublicPatient> => {
+const getNonSensitiveEntries = (): PublicPatient[] => {
   return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,

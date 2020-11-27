@@ -50,26 +50,6 @@ const parseGender = (gender: any): Gender => {
   return gender;
 };
 
-const parseEntries = (entries: Entry[]): Entry[] => {
-  /*
-  if (!entries) {
-    throw new Error('Entries missing');
-  }
-  */
-  if (!entries) {
-    return [];
-  }
-
-  entries.forEach(entry => {
-    const types = Object.values(EntryType);
-    if (!types.includes(entry.type)) {
-      throw new Error(`Incorrect type: ${entry.type}`);
-    }
-  });
-
-  return entries;
-};
-
 export const toNewPatient = (object: any): NewPatient => {
   const newEntry: NewPatient = {
     name: parseString('name', object.name),
@@ -77,18 +57,15 @@ export const toNewPatient = (object: any): NewPatient => {
     ssn: parseString('ssn', object.ssn),
     gender: parseGender(object.gender),
     occupation: parseString('occupation', object.occupation),
-    entries: parseEntries(object.entries),
+    entries: [],
   };
 
   return newEntry;
 };
 
-
-
-// 9.23
+//
 // Validations for POST /api/patients/:id/entry
 //
-
 const validateBaseEntry = (entry: BaseEntry): void => {
   // date: string;
   if (!entry.date || !isString(entry.date) || !isDate(entry.date)) {
@@ -101,6 +78,10 @@ const validateBaseEntry = (entry: BaseEntry): void => {
   }
 
   // diagnosisCodes?: Array<Diagnose['code']>
+  if (entry.diagnosisCodes && entry.diagnosisCodes.length === 0) {
+    throw new Error('Incorrect - empty diagnosisCodes received');
+  }
+
   if (entry.diagnosisCodes) {
     for (let i = 0; i < entry.diagnosisCodes.length; i++) {
       let found = false;
@@ -116,7 +97,7 @@ const validateBaseEntry = (entry: BaseEntry): void => {
     }
   }
 
-  // descriptiom: string;
+  // description: string;
   if (!entry.description || !isString(entry.description)) {
     throw new Error('Incorrect or missing description');
   }
@@ -184,12 +165,12 @@ const validateEntry = (object: Entry): void => {
       validateOccupationalHealthcare(object);
       break;
     default:
-      throw new Error('Incorrect \'type\' for entry');
+      throw new Error('Incorrect or missing \'type\' for entry');
   }
 };
 
 export const addEntryToPatient = (object: Entry): Entry => {
-  if (!object) {
+  if (!object || Object.keys(object).length === 0) {
     throw new Error('Missing entry');
   }
 
@@ -200,7 +181,7 @@ export const addEntryToPatient = (object: Entry): Entry => {
   }
 
   // Motivation to add this: the user may have submitted some extra fields in req.body
-  // so we select only the right fields to the entry object
+  // so let's select only the right fields to the entry object
   switch (object.type) {
     case EntryType.HealthCheck:
       return {
@@ -234,7 +215,6 @@ export const addEntryToPatient = (object: Entry): Entry => {
         sickLeave: object.sickLeave || { startDate: '', endDate: ''},
       };
     default:
-      throw new Error('Incorrect \'type\' for entry');
+      throw new Error('Oops, Incorrect or missing \'type\' for entry');
   }
-
 };

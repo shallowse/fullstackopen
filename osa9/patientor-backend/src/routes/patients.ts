@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-// ^ caused by accessing error.message
+// ^ caused by accessing error.message (https://nodejs.org/api/errors.html#errors_new_error_message)
 import express from 'express';
 import patientService from '../services/patientService';
 

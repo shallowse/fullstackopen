@@ -18,6 +18,19 @@ app.get('/api/ping', (_req, res) => {
 app.use('/api/diagnoses', diagnosesRouter);
 app.use('/api/patients', patientsRouter);
 
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+app.use((err: any, _req: any, res: any, next: any) => {
+  if (err.name === 'SyntaxError') {
+    // SyntaxError encountered e.g. while receiving malformed JSON data in POST
+    return res.status(400).send(String(err.message));
+  }
+  next(err);
+});
+/* eslint-enable */
+
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
 });
