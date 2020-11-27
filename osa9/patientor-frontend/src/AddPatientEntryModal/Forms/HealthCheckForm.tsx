@@ -39,8 +39,9 @@ const HealthCheckForm: React.FC<SubProps> = ({ onSubmit, onCancel, diagnoses }) 
         if (values.healthCheckRating < 0 || values.healthCheckRating > 3) {
           errors.healtCheckRating = requiredError;
         }
-        // TODO: add check for values.dia
-        // if (values.diagnosiscodes)
+        if (!values.diagnosisCodes.length) {
+          errors.diagnosisCodes = requiredError;
+        }
 
         return errors;
       }}
@@ -79,7 +80,6 @@ const HealthCheckForm: React.FC<SubProps> = ({ onSubmit, onCancel, diagnoses }) 
               //name='diagnosisCodes'
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
-              //diagnoses={Object.values(diagnoses)}
               diagnoses={diagnoses}
               component={DiagnosisSelection}
             />

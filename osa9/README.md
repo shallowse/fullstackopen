@@ -55,3 +55,49 @@ tsconfig.json
 + "jsx": "react"
 ```
 
+## Some screenshots of the App 
+
+The below images exhibit the functionality of the backend and front-end that was build during exercises 9.8.-9.13. and 9.16.-9.27.  
+  
+
+## Patient list 
+![](./images/1.png)
+  
+
+## Single patient view
+![](./images/2.png)
+  
+
+## Single patient view: Adding new healthcheck entry
+![](./images/3-healthcheckEntry.png) 
+  
+
+## Sinle patient view: Adding a new hospital entry
+![](./images/4-hospitalEntry.png) 
+  
+  
+## Single patient view: Adding a new occupational healtcare entry
+![](./images/5-occupationalhealthcareEntry.png) 
+  
+
+## Single patient view: View after entry additions
+![](./images/6.png)
+  
+
+## Patient list: Adding a new patient
+![](./images/7-addNewPatient.png) 
+  
+
+## Single patient view: New patient with new entries
+![](./images/8.png)
+  
+
+## Single patient view: Example of how an error message is shown
+![](./images/9-error.png) 
+  
+
+## TODO
+
+The implementation of the above shown forms in the front-end (```patientor-frontend/AddPatientEntryModal/Forms```) could maybe be refactored because currently the three entry forms duplicate the same code for fields Date, Specialist, Description and Diagnoses.
+
+However, for these exercises I decided that the current implementation suffices.

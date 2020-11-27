@@ -10,7 +10,6 @@ import { Diagnose } from '../../types';
 interface SubProps {
   onSubmit: (values: any) => void;
   onCancel: () => void;
-  //diagnoses: { [code: string]: Diagnose };
   diagnoses: Diagnose[];
 }
 
@@ -42,8 +41,9 @@ const OccupationalHealthcareForm: React.FC<SubProps> = ({ onSubmit, onCancel, di
         if (!values.employerName) {
           errors.employerName = requiredError;
         }
-        // TODO: add check for values.dia
-        // if (values.diagnosiscodes)
+        if (!values.diagnosisCodes.length) {
+          errors.diagnosisCodes = requiredError;
+        }
 
         return errors;
       }}
@@ -74,7 +74,6 @@ const OccupationalHealthcareForm: React.FC<SubProps> = ({ onSubmit, onCancel, di
               //name='diagnosisCodes'
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
-              //diagnoses={Object.values(diagnoses)}
               diagnoses={diagnoses}
               component={DiagnosisSelection}
             />

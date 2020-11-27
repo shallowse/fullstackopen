@@ -10,7 +10,6 @@ import { Diagnose } from '../../types';
 interface SubProps {
   onSubmit: (values: any) => void;
   onCancel: () => void;
-  //diagnoses: { [code: string]: Diagnose };
   diagnoses: Diagnose[];
 }
 
@@ -44,8 +43,9 @@ const HospitalForm: React.FC<SubProps> = ({ onSubmit, onCancel, diagnoses }) => 
         if (!values.dischargeCriteria) {
           errors.dischargeCriteria = requiredError;
         }
-        // TODO: add check for values.dia
-        // if (values.diagnosiscodes )
+        if (!values.diagnosisCodes.length) {
+          errors.diagnosisCodes = requiredError;
+        }
 
         return errors;
       }}
@@ -76,7 +76,6 @@ const HospitalForm: React.FC<SubProps> = ({ onSubmit, onCancel, diagnoses }) => 
               //name='diagnosisCodes'
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
-              //diagnoses={Object.values(diagnoses)}
               diagnoses={diagnoses}
               component={DiagnosisSelection}
             />
